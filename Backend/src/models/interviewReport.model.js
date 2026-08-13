@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ref } = require("node:process");
 
 /**
  * - job description schema
@@ -100,7 +101,11 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestions: [technicalQuestionSchema],
     behavioralQuestions: [behavioralQuestionSchema],
     skillGaps: [skillGapschema],
-    preperationPlan: [preparationPlanSchema]
+    preperationPlan: [preparationPlanSchema],
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+    }
 }, {
     timestamps: true
 })
