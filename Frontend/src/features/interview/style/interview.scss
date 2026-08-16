@@ -111,6 +111,12 @@ $severity-low: #3fb950;
     }
 }
 
+.nav-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 // ── Center Content ────────────────────────────────────────────────────────────
 .interview-content {
     flex: 1;
@@ -204,6 +210,7 @@ $severity-low: #3fb950;
         font-weight: 500;
         color: $text-primary;
         line-height: 1.5;
+        overflow-wrap: anywhere;
     }
 
     &__chevron {
@@ -237,6 +244,7 @@ $severity-low: #3fb950;
             font-size: 0.835rem;
             border-color: color.adjust($border-color, $lightness: 8%);
             line-height: 1.6;
+            overflow-wrap: anywhere;
         }
     }
 
@@ -483,6 +491,7 @@ $severity-low: #3fb950;
     border-radius: 0.4rem;
     border: 1px solid;
     cursor: default;
+    overflow-wrap: anywhere;
 
     &--high {
         color: $severity-high;
@@ -500,5 +509,137 @@ $severity-low: #3fb950;
         color: $severity-low;
         background-color: rgba($severity-low, 0.1);
         border-color: rgba($severity-low, 0.25);
+    }
+}
+
+@media (max-width: 1279px) {
+    .interview-page {
+        padding: 1rem;
+    }
+
+    .interview-nav {
+        width: 200px;
+        padding: 1.25rem 0.75rem;
+    }
+
+    .interview-sidebar {
+        width: 220px;
+        padding: 1.25rem 1rem;
+    }
+
+    .interview-content {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 1023px) {
+    .interview-page {
+        padding: 0.75rem;
+    }
+
+    .interview-layout {
+        flex-direction: column;
+    }
+
+    .interview-divider {
+        display: none;
+    }
+
+    .interview-nav,
+    .interview-sidebar,
+    .interview-content {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .interview-nav {
+        order: 1;
+        padding: 1rem;
+        gap: 1rem;
+
+        .button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .nav-content {
+        gap: 0.5rem;
+    }
+
+    .interview-content {
+        order: 3;
+        padding: 1rem;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .content-header {
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
+    .interview-sidebar {
+        order: 2;
+        padding: 1rem;
+    }
+
+    .logout-container {
+        padding-top: 0.75rem;
+    }
+}
+
+@media (max-width: 639px) {
+    .interview-page {
+        padding: 0.5rem;
+    }
+
+    .interview-layout {
+        border-radius: 0.75rem;
+    }
+
+    .interview-nav,
+    .interview-content,
+    .interview-sidebar {
+        padding: 0.85rem;
+    }
+
+    .interview-nav {
+        &__item {
+            font-size: 0.82rem;
+            padding: 0.6rem 0.65rem;
+        }
+    }
+
+    .content-header {
+        h2 {
+            font-size: 1rem;
+        }
+    }
+
+    .q-card {
+        &__header {
+            padding: 0.75rem;
+        }
+
+        &__body {
+            padding: 0 0.75rem 0.75rem;
+        }
+    }
+
+    .roadmap-day {
+        padding: 0.65rem 0 0.65rem 2.8rem;
+
+        &::before {
+            left: 17px;
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    .roadmap-list {
+        &::before {
+            left: 23px;
+        }
     }
 }

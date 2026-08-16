@@ -1,13 +1,15 @@
 main{
     min-height: 100vh;
     width: 100%;
+    padding: 1rem;
 
     display: flex;
     justify-content: center;
     align-items: center;
 
     .form-container{
-        min-width: 350px;
+        width: min(100%, 420px);
+        min-width: 0;
 
         display: flex;
         flex-direction: column;
@@ -27,6 +29,7 @@ main{
     }
 
     input{
+        width: 100%;
         border: none;
         outline: none;
         padding-inline: 1rem;
@@ -37,5 +40,19 @@ main{
     a{
         color: #e1034d;
         text-decoration: none ;
+    }
+}
+
+@media (max-width: 639px) {
+    main {
+        padding: 0.85rem;
+
+        .form-container {
+            width: 100%;
+        }
+
+        button {
+            width: 100%;
+        }
     }
 }
