@@ -11,13 +11,99 @@ const Home = () => {
     const { handleLogout } = useAuth()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
+    const [ resumeFile, setResumeFile ] = useState(null)
+    const [ isDragging, setIsDragging ] = useState(false)
     const resumeInputRef = useRef()
+    const dragCounterRef = useRef(0)
 
     const navigate = useNavigate()
 
+    const formatFileSize = (sizeInBytes) => {
+        if (!sizeInBytes && sizeInBytes !== 0) return ''
+        if (sizeInBytes < 1024) return `${sizeInBytes} B`
+        if (sizeInBytes < 1024 * 1024) return `${Math.round(sizeInBytes / 1024)} KB`
+        return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`
+    }
+
+    const getFileTypeLabel = (file) => {
+        const extension = file.name.split('.').pop()?.toLowerCase()
+        if (extension === 'pdf') return 'PDF'
+        if (extension === 'docx') return 'DOCX'
+        return 'File'
+    }
+
+    const isValidResumeFile = (file) => {
+        const maxSize = 5 * 1024 * 1024
+        const lowerName = file.name.toLowerCase()
+        const validByName = lowerName.endsWith('.pdf') || lowerName.endsWith('.docx')
+        const validMimeTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ]
+        const validByType = !file.type || validMimeTypes.includes(file.type)
+
+        return validByName && validByType && file.size <= maxSize
+    }
+
+    const handleResumeFile = (file) => {
+        if (!file || !isValidResumeFile(file)) {
+            return
+        }
+
+        setResumeFile(file)
+
+        if (resumeInputRef.current) {
+            const dataTransfer = new DataTransfer()
+            dataTransfer.items.add(file)
+            resumeInputRef.current.files = dataTransfer.files
+        }
+    }
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            handleResumeFile(file)
+        }
+    }
+
+    const handleDragEnter = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        dragCounterRef.current += 1
+        setIsDragging(true)
+    }
+
+    const handleDragOver = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        setIsDragging(true)
+    }
+
+    const handleDragLeave = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        dragCounterRef.current -= 1
+        if (dragCounterRef.current <= 0) {
+            dragCounterRef.current = 0
+            setIsDragging(false)
+        }
+    }
+
+    const handleDrop = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        dragCounterRef.current = 0
+        setIsDragging(false)
+
+        const file = e.dataTransfer.files?.[0]
+        if (file) {
+            handleResumeFile(file)
+        }
+    }
+
     const handleGenerateReport = async () => {
-        const resumeFile = resumeInputRef.current.files[ 0 ]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+        const selectedResumeFile = resumeFile || resumeInputRef.current.files[ 0 ]
+        const data = await generateReport({ jobDescription, selfDescription, resumeFile: selectedResumeFile })
         navigate(`/interview/${data._id}`)
     }
 
@@ -91,13 +177,31 @@ const Home = () => {
                                 Upload Resume
                                 <span className='badge badge--best'>Best Results</span>
                             </label>
-                            <label className='dropzone' htmlFor='resume'>
+                            <label
+                                className={`dropzone ${isDragging ? 'dropzone--dragging' : ''} ${resumeFile ? 'dropzone--uploaded' : ''}`}
+                                htmlFor='resume'
+                                onDragEnter={handleDragEnter}
+                                onDragOver={handleDragOver}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDrop}>
                                 <span className='dropzone__icon'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
                                 </span>
-                                <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
-                                <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                {!resumeFile && (
+                                    <>
+                                        <p className='dropzone__title'>{isDragging ? 'Drop your resume here' : 'Click to upload or drag & drop'}</p>
+                                        <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
+                                    </>
+                                )}
+                                {resumeFile && (
+                                    <div className='dropzone__uploaded'>
+                                        <p className='dropzone__check'>✓</p>
+                                        <p className='dropzone__uploaded-title'>Resume uploaded</p>
+                                        <p className='dropzone__file-name'>{resumeFile.name}</p>
+                                        <p className='dropzone__file-meta'>{getFileTypeLabel(resumeFile)} • {formatFileSize(resumeFile.size)}</p>
+                                    </div>
+                                )}
+                                <input ref={resumeInputRef} onChange={handleFileChange} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
                             </label>
                         </div>
 
