@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState } from "react";
 
-const InterviewContext = createContext();
+export const InterviewContext = createContext();
 
 export const InterviewProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
@@ -8,7 +9,16 @@ export const InterviewProvider = ({ children }) => {
     const [reports, setReports] = useState([]);
 
     return (
-        <InterviewContext.Provider value={{ loading, setLoading, report, setReport, reports, setReports }}>
+        <InterviewContext.Provider
+            value={{
+                loading,
+                setLoading,
+                report,
+                setReport,
+                reports,
+                setReports,
+            }}
+        >
             {children}
         </InterviewContext.Provider>
     );
