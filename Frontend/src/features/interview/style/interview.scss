@@ -478,3 +478,15 @@ $severity-low: #3fb950;
         border-color: rgba($severity-low, 0.25);
     }
 }
+
+.interview-nav__logout {
+    margin-top: 0.6rem;
+    background-color: transparent;
+    border: 1px solid $border-color;
+    color: $text-primary;
+
+    &:hover {
+        border-color: $accent;
+        color: $accent;
+    }
+}

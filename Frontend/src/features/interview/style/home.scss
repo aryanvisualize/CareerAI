@@ -31,6 +31,25 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
     gap: 2rem;
 }
 
+.app-header {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid $border-color;
+
+    &__brand {
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: $text-primary;
+        line-height: 1.2;
+    }
+}
+
 .loading-screen {
     min-height: 100vh;
     display: flex;
@@ -91,6 +110,14 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 
     .highlight {
         color: $accent;
+    }
+}
+
+@media (max-width: 640px) {
+    .app-header {
+        &__brand {
+            font-size: 1.5rem;
+        }
     }
 }
 
@@ -359,6 +386,18 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 
     &:active {
         transform: scale(0.98);
+    }
+
+    &--ghost {
+        background: transparent;
+        border: 1px solid $border-color;
+        color: $text-primary;
+
+        &:hover {
+            border-color: $accent;
+            color: $accent;
+            opacity: 1;
+        }
     }
 }
 

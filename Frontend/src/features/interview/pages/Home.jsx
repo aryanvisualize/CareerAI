@@ -3,10 +3,12 @@ import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
+import { useAuth } from '../../auth/hooks/useAuth.js'
 
 const Home = () => {
 
     const { loading, generateReport,reports } = useInterview()
+    const { handleLogout } = useAuth()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const resumeInputRef = useRef()
@@ -18,6 +20,13 @@ const Home = () => {
         const data = await generateReport({ jobDescription, selfDescription, resumeFile })
         navigate(`/interview/${data._id}`)
     }
+
+    const onLogout = async () => {
+        const success = await handleLogout()
+        if (success) {
+            navigate('/login')
+        }
+    }
     if (loading) {
         return (
             <main className='loading-screen'>
@@ -27,6 +36,16 @@ const Home = () => {
     }
     return (
         <div className='home-page'>
+
+            <header className='app-header'>
+                <span className='app-header__brand'>CareerAI</span>
+                <button
+                    type='button'
+                    onClick={onLogout}
+                    className='generate-btn generate-btn--ghost'>
+                    Logout
+                </button>
+            </header>
 
             {/* Page Header */}
             <header className='page-header'>
