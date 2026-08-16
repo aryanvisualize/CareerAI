@@ -79,7 +79,6 @@ async function generateResumePdfController(req, res) {
         console.log("METHOD:", req.method);
         console.log("PARAMS:", req.params);
         console.log("USER:", req.user);
-        console.log("BODY:", req.body);
 
         const { interviewReportId } = req.params;
 
@@ -116,14 +115,16 @@ async function generateResumePdfController(req, res) {
 
         console.log("PDF generated:", pdfBuffer.length);
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition":
-                `attachment; filename=resume_${interviewReportId}.pdf`,
-            "Content-Length": pdfBuffer.length
-        });
+        res.status(200);
 
-        return res.send(pdfBuffer);
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+            "Content-Disposition",
+            `inline; filename="resume_${interviewReportId}.pdf"`
+        );
+        res.setHeader("Content-Length", pdfBuffer.length);
+
+        return res.end(pdfBuffer);
 
     } catch (error) {
         console.error("RESUME PDF ERROR:", error);

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
 import { useParams } from 'react-router'
+import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 
 
@@ -73,7 +74,7 @@ const Interview = () => {
     if (loading || !report) {
         return (
             <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
+                <LoadingSpinner label='Crafting your tailored resume……' />
             </main>
         )
     }

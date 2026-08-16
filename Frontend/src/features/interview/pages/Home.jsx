@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
+import LoadingSpinner from '../components/LoadingSpinner.jsx'
 
 const Home = () => {
 
@@ -20,7 +21,7 @@ const Home = () => {
     if (loading) {
         return (
             <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
+                <LoadingSpinner label='Loading your interview plan...' />
             </main>
         )
     }
