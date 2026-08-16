@@ -18,16 +18,21 @@ export async function register({username, email, password}) {
     }
 }
 
-export async function login({email, password}) {
+export async function login({ email, password }) {
     try {
-        const response = await api.post('/api/auth/login', {
-                email, password
-        })
+        const response = await api.post("/api/auth/login", {
+            email,
+            password
+        });
 
         return response.data;
-
     } catch (error) {
-        console.log(error);
+        console.error(
+            "Login failed:",
+            error.response?.data || error.message
+        );
+
+        throw error;
     }
 }
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "",
     withCredentials: true,
 })
 
@@ -47,7 +47,7 @@ export const getAllInterviewReports = async () => {
 }
 
 
-/**
+/** 
  * @description Service to generate resume pdf based on user self description, resume content and job description.
  */
 export const generateResumePdf = async ({ interviewReportId }) => {
