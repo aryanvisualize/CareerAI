@@ -603,17 +603,30 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 
 // ── Page Footer ───────────────────────────────────────────────────────────────
 .page-footer {
-    display: flex;
-    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
 
-    a {
+    p {
+        margin: 0;
         font-size: 0.8rem;
         color: $text-muted;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    a {
+        color: $accent;
         text-decoration: none;
         transition: color 0.2s;
 
         &:hover {
             color: $text-primary;
+        }
+
+        &:focus-visible {
+            outline: 1px solid rgba($accent, 0.7);
+            outline-offset: 2px;
         }
     }
 }

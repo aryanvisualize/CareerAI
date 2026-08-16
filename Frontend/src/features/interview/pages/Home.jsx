@@ -260,9 +260,15 @@ const Home = () => {
 
             {/* Page Footer */}
             <footer className='page-footer'>
-                <a href='#'>Privacy Policy</a>
-                <a href='#'>Terms of Service</a>
-                <a href='#'>Help Center</a>
+                <p>
+                    © 2026 CareerAI · Built with React, Node.js, MongoDB & Gemini ·{' '}
+                    <a
+                        href='https://www.linkedin.com/in/aryan-rastogi-dev/'
+                        target='_blank'
+                        rel='noopener noreferrer'>
+                        Aryan Rastogi
+                    </a>
+                </p>
             </footer>
         </div>
     )
