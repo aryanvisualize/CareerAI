@@ -18,4 +18,10 @@ const interviewRouter = require("./routes/interview.routes.js");
 app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "ok"
+    });
+});
+
 module.exports = app;
