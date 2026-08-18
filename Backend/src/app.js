@@ -8,20 +8,16 @@ app.use(cookieParser());
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://careerai-frontend-4cnt.onrender.com"
+    "https://careerai-frontend-4cnt.onrender.com",
 ];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-    exposedHeaders: ["Content-Disposition", "Content-Length"]
-}));
+app.use(
+    cors({
+        origin: allowedOrigins,
+        credentials: true,
+        exposedHeaders: ["Content-Disposition", "Content-Length"],
+    })
+);
 
 // required all the routes here
 const authRouter = require("./routes/auth.routes.js");
