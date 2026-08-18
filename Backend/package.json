@@ -4,6 +4,7 @@
   "description": "AI-Powered Job Preparation & Resume Intelligence Platform",
   "main": "index.js",
   "scripts": {
+    "postinstall": "puppeteer browsers install chrome",
     "dev": "nodemon server.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
