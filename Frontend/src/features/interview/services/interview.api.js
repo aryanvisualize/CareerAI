@@ -5,6 +5,16 @@ const api = axios.create({
     withCredentials: true,
 });
 
+const getFilenameFromContentDisposition = (contentDisposition, fallback) => {
+    if (!contentDisposition) {
+        return fallback;
+    }
+
+    const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+
+    return filenameMatch?.[1] || fallback;
+};
+
 /**
  * @description Service to generate interview report based on user self description, resume and job description.
  */
@@ -59,5 +69,11 @@ export const generateResumePdf = async ({ interviewReportId }) => {
         }
     );
 
-    return response.data;
+    return {
+        blob: response.data,
+        filename: getFilenameFromContentDisposition(
+            response.headers["content-disposition"],
+            `resume_${interviewReportId}.pdf`
+        ),
+    };
 };

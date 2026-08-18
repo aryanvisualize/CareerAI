@@ -78,7 +78,6 @@ async function generateResumePdfController(req, res) {
         console.log("========== RESUME PDF ==========");
         console.log("METHOD:", req.method);
         console.log("PARAMS:", req.params);
-        console.log("USER:", req.user);
 
         const { interviewReportId } = req.params;
 
@@ -105,7 +104,7 @@ async function generateResumePdfController(req, res) {
         console.log("Job description length:", jobDescription?.length);
         console.log("Self description length:", selfDescription?.length);
 
-        console.log("Calling Gemini...");
+        console.log("Generating resume PDF...");
 
         const pdfBuffer = await generateResumePdf({
             resume,
@@ -116,22 +115,24 @@ async function generateResumePdfController(req, res) {
         console.log("PDF generated:", pdfBuffer.length);
 
         res.status(200);
-
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
             "Content-Disposition",
-            `inline; filename="resume_${interviewReportId}.pdf"`
+            `attachment; filename="resume_${interviewReportId}.pdf"`
         );
         res.setHeader("Content-Length", pdfBuffer.length);
 
-        return res.end(pdfBuffer);
+        return res.send(pdfBuffer);
 
     } catch (error) {
-        console.error("RESUME PDF ERROR:", error);
+        console.error("RESUME PDF ERROR:", {
+            message: error.message,
+            stack: error.stack
+        });
 
         return res.status(500).json({
-            message: "Failed to generate resume PDF",
-            error: error.message
+            message: "Failed to generate resume PDF. Please try again.",
+            code: "RESUME_PDF_GENERATION_FAILED"
         });
     }
 }

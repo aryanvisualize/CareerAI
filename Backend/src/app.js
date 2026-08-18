@@ -19,7 +19,8 @@ app.use(cors({
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true
+    credentials: true,
+    exposedHeaders: ["Content-Disposition", "Content-Length"]
 }));
 
 // required all the routes here

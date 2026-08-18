@@ -8,6 +8,24 @@ import { useContext, useEffect } from "react";
 import { InterviewContext } from "../interview.context";
 import { useParams } from "react-router";
 
+const getResumePdfErrorMessage = async (error) => {
+  const fallbackMessage = "Failed to generate resume PDF. Please try again.";
+  const responseData = error.response?.data;
+
+  if (responseData instanceof Blob) {
+    try {
+      const text = await responseData.text();
+      const parsed = JSON.parse(text);
+
+      return parsed.message || fallbackMessage;
+    } catch {
+      return fallbackMessage;
+    }
+  }
+
+  return responseData?.message || fallbackMessage;
+};
+
 export const useInterview = () => {
   const context = useContext(InterviewContext);
   const { interviewId } = useParams();
@@ -74,17 +92,29 @@ export const useInterview = () => {
   const getResumePdf = async (interviewReportId) => {
     setLoading(true);
     try {
-      const response = await generateResumePdf({ interviewReportId });
-      const url = window.URL.createObjectURL(
-        new Blob([response], { type: "application/pdf" }),
-      );
+      const { blob, filename } = await generateResumePdf({ interviewReportId });
+      const pdfBlob =
+        blob instanceof Blob ? blob : new Blob([blob], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `resume_${interviewReportId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
+
+      try {
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+      } finally {
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
+
+      return true;
     } catch (error) {
-      console.log(error);
+      const message = await getResumePdfErrorMessage(error);
+
+      console.error("Failed to download resume PDF:", error);
+      window.alert(message);
+      return false;
     } finally {
       setLoading(false);
     }

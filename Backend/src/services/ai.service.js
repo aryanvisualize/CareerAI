@@ -1,7 +1,15 @@
 const { GoogleGenAI } = require("@google/genai");
+const fs = require("node:fs");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
 const puppeteer = require("puppeteer");
+const puppeteerPackage = require("puppeteer/package.json");
+
+const puppeteerPdfArgs = [
+  "--no-sandbox",
+  "--disable-setuid-sandbox",
+  "--disable-dev-shm-usage",
+];
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY,
@@ -220,13 +228,45 @@ ${jobDescription}`;
   return result;
 }
 
-async function generatePdfFromHtml(htmlContent) {
-  const browser = await puppeteer.launch({
-    headless: true,
-     args: ["--no-sandbox", "--disable-setuid-sandbox"]
-  });
+async function getPuppeteerLaunchOptions() {
+  console.log("Puppeteer version:", puppeteerPackage.version);
+  console.log(
+    "Puppeteer cache dir:",
+    process.env.PUPPETEER_CACHE_DIR || "default Puppeteer cache",
+  );
+
+  let executablePath;
 
   try {
+    executablePath = await puppeteer.executablePath();
+  } catch (error) {
+    console.error("Puppeteer executable path lookup failed:", error.message);
+    throw error;
+  }
+
+  const executableExists = fs.existsSync(executablePath);
+
+  console.log("Puppeteer executable path:", executablePath);
+  console.log("Puppeteer executable exists:", executableExists);
+
+  if (!executableExists) {
+    throw new Error(
+      'Puppeteer Chrome executable is missing. Run "npm run build" during deployment.',
+    );
+  }
+
+  return {
+    headless: true,
+    executablePath,
+    args: puppeteerPdfArgs,
+  };
+}
+
+async function generatePdfFromHtml(htmlContent) {
+  let browser;
+
+  try {
+    browser = await puppeteer.launch(await getPuppeteerLaunchOptions());
     const page = await browser.newPage();
 
     await page.setContent(htmlContent, {
@@ -244,12 +284,13 @@ async function generatePdfFromHtml(htmlContent) {
       },
     });
 
-    console.log("PDF size:", pdfBuffer.length);
-    console.log("PDF header:", pdfBuffer.subarray(0, 5).toString());
+    console.log("PDF buffer size:", pdfBuffer.length);
 
     return pdfBuffer;
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }
 
