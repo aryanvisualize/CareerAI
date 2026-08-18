@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "build": "puppeteer browsers install chrome",
+    "build": "npx puppeteer browsers install chrome && npx puppeteer browsers list",
     "start": "node server.js"
   },
   "keywords": [],

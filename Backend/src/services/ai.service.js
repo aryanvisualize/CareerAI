@@ -1,5 +1,5 @@
 const { GoogleGenAI } = require("@google/genai");
-const fs = require("node:fs");
+const fs = require("fs");
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
 const puppeteer = require("puppeteer");
@@ -263,10 +263,24 @@ async function getPuppeteerLaunchOptions() {
 }
 
 async function generatePdfFromHtml(htmlContent) {
-  let browser;
+  const executablePath = puppeteer.executablePath();
+
+  console.log("========== PUPPETEER DEBUG ==========");
+  console.log("Puppeteer version:", require("puppeteer/package.json").version);
+  console.log("Executable:", executablePath);
+  console.log("Exists:", fs.existsSync(executablePath));
+  console.log("=====================================");
+
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+    ],
+  });
 
   try {
-    browser = await puppeteer.launch(await getPuppeteerLaunchOptions());
     const page = await browser.newPage();
 
     await page.setContent(htmlContent, {
@@ -284,13 +298,11 @@ async function generatePdfFromHtml(htmlContent) {
       },
     });
 
-    console.log("PDF buffer size:", pdfBuffer.length);
+    console.log("PDF size:", pdfBuffer.length);
 
     return pdfBuffer;
   } finally {
-    if (browser) {
-      await browser.close();
-    }
+    await browser.close();
   }
 }
 
