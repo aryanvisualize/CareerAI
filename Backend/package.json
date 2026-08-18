@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "puppeteer browsers install chrome",
     "dev": "nodemon server.js",
+    "build": "npx puppeteer browsers install chrome",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
