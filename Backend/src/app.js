@@ -8,8 +8,8 @@ app.use(cookieParser());
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://careerai-frontend-4cnt.onrender.com",
-];
+    process.env.FRONTEND_URL
+].filter(Boolean);
 
 app.use(
     cors({
@@ -29,8 +29,23 @@ app.use("/api/interview", interviewRouter);
 
 app.get("/health", (req, res) => {
     res.status(200).json({
-        status: "ok"
+        status: "ok",
+        env: process.env.NODE_ENV || "development",
     });
 });
+
+// Global error handler — catches unhandled errors from async route handlers
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+    console.error("Unhandled error:", err.message)
+    // Never expose stack traces in production
+    const isDev = process.env.NODE_ENV !== "production"
+    res.status(err.status || 500).json({
+        message: isDev ? err.message : "Internal server error",
+    })
+})
+
+console.log(`[app] NODE_ENV: ${process.env.NODE_ENV || "development"}`)
+console.log(`[app] Allowed CORS origins: ${allowedOrigins.join(", ")}`)
 
 module.exports = app;

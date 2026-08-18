@@ -25,8 +25,10 @@ export const useAuth = () => {
     try {
       const data = await register({ username, email, password });
       setUser(data.user);
+      return true;
     } catch (err) {
       console.log(err);
+      return false;
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,11 @@ export const useAuth = () => {
         const data = await getMe();
         setUser(data.user);
       } catch (err) {
-        console.log(err);
+        // 401 is expected when the user is not logged in — suppress noisy output
+        if (err?.response?.status !== 401) {
+          console.error("get-me error:", err.message)
+        }
+        setUser(null);
       } finally {
         setLoading(false);
       }
