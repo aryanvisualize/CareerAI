@@ -1,5 +1,6 @@
 const pdfParse = require("pdf-parse")
-const { generateInterviewReport, generateResumePdf } = require("../services/ai.service")
+const { generateInterviewReport, generateStructuredResume } = require("../services/ai.service")
+const { generateResumePdf } = require("../services/resume-pdf.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
 
@@ -104,31 +105,42 @@ async function generateResumePdfController(req, res) {
         console.log("Job description length:", jobDescription?.length);
         console.log("Self description length:", selfDescription?.length);
 
-        console.log("Generating resume PDF...");
+        console.log("Generating structured resume...");
 
-        const pdfBuffer = await generateResumePdf({
+        const resumeData = await generateStructuredResume({
             resume,
             jobDescription,
             selfDescription
         });
 
-        console.log("PDF generated:", pdfBuffer.length);
+        console.log("Resume JSON generated successfully");
+        console.log("Generating PDF with PDFKit...");
+
+        const pdfBuffer = await generateResumePdf(resumeData);
+
+        if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.subarray(0, 4).toString() !== "%PDF") {
+            throw new Error("Generated PDF buffer is invalid.");
+        }
+
+        console.log("PDF generated successfully");
+        console.log("PDF size:", pdfBuffer.length);
+        console.log("================================");
 
         res.status(200);
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader(
             "Content-Disposition",
-            `attachment; filename="resume_${interviewReportId}.pdf"`
+            `inline; filename="resume.pdf"`
         );
         res.setHeader("Content-Length", pdfBuffer.length);
 
         return res.send(pdfBuffer);
 
     } catch (error) {
-        console.error("RESUME PDF ERROR:", {
-            message: error.message,
-            stack: error.stack
-        });
+        console.error("========== RESUME PDF ERROR ==========");
+        console.error(error.message);
+        console.error(error.stack);
+        console.error("======================================");
 
         return res.status(500).json({
             message: "Failed to generate resume PDF. Please try again.",

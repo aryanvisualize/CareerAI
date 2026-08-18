@@ -1,18 +1,22 @@
 const { GoogleGenAI } = require("@google/genai");
-const fs = require("fs");
 const { z } = require("zod");
-const { zodToJsonSchema } = require("zod-to-json-schema");
-const puppeteer = require("puppeteer");
-const puppeteerPackage = require("puppeteer/package.json");
-
-const puppeteerPdfArgs = [
-  "--no-sandbox",
-  "--disable-setuid-sandbox",
-  "--disable-dev-shm-usage",
-];
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY,
+});
+
+const interviewQuestionSchema = z.object({
+  question: z
+    .string()
+    .describe("The technical question can be asked in the interview"),
+  intention: z
+    .string()
+    .describe("The intention of interviewer behind asking this question"),
+  answer: z
+    .string()
+    .describe(
+      "How to answer this question, what points to cover, what approach to take etc.",
+    ),
 });
 
 const interviewReportSchema = z.object({
@@ -22,40 +26,12 @@ const interviewReportSchema = z.object({
       "A score between 0 and 100 indicating how well the candidate's profile matches the job describe",
     ),
   technicalQuestions: z
-    .array(
-      z.object({
-        question: z
-          .string()
-          .describe("The technical question can be asked in the interview"),
-        intention: z
-          .string()
-          .describe("The intention of interviewer behind asking this question"),
-        answer: z
-          .string()
-          .describe(
-            "How to answer this question, what points to cover, what approach to take etc.",
-          ),
-      }),
-    )
+    .array(interviewQuestionSchema)
     .describe(
       "Technical questions that can be asked in the interview along with their intention and how to answer them",
     ),
   behavioralQuestions: z
-    .array(
-      z.object({
-        question: z
-          .string()
-          .describe("The technical question can be asked in the interview"),
-        intention: z
-          .string()
-          .describe("The intention of interviewer behind asking this question"),
-        answer: z
-          .string()
-          .describe(
-            "How to answer this question, what points to cover, what approach to take etc.",
-          ),
-      }),
-    )
+    .array(interviewQuestionSchema)
     .describe(
       "Behavioral questions that can be asked in the interview along with their intention and how to answer them",
     ),
@@ -104,10 +80,7 @@ const interviewReportSchema = z.object({
 const geminiResponseSchema = {
   type: "object",
   properties: {
-    matchScore: {
-      type: "number",
-    },
-
+    matchScore: { type: "number" },
     technicalQuestions: {
       type: "array",
       items: {
@@ -120,7 +93,6 @@ const geminiResponseSchema = {
         required: ["question", "intention", "answer"],
       },
     },
-
     behavioralQuestions: {
       type: "array",
       items: {
@@ -133,7 +105,6 @@ const geminiResponseSchema = {
         required: ["question", "intention", "answer"],
       },
     },
-
     skillGaps: {
       type: "array",
       items: {
@@ -148,7 +119,6 @@ const geminiResponseSchema = {
         required: ["skill", "severity"],
       },
     },
-
     preparationPlan: {
       type: "array",
       items: {
@@ -164,12 +134,8 @@ const geminiResponseSchema = {
         required: ["day", "focus", "tasks"],
       },
     },
-
-    title: {
-      type: "string",
-    },
+    title: { type: "string" },
   },
-
   required: [
     "matchScore",
     "technicalQuestions",
@@ -177,6 +143,157 @@ const geminiResponseSchema = {
     "skillGaps",
     "preparationPlan",
     "title",
+  ],
+};
+
+const stringField = z.string().trim().optional().default("");
+const stringList = z.array(z.string().trim()).optional().default([]);
+
+const resumeDataSchema = z.object({
+  name: stringField,
+  location: stringField,
+  phone: stringField,
+  email: stringField,
+  linkedin: stringField,
+  github: stringField,
+  portfolio: stringField,
+  summary: stringField,
+  skills: z
+    .array(
+      z.object({
+        category: stringField,
+        items: stringList,
+      }),
+    )
+    .optional()
+    .default([]),
+  experience: z
+    .array(
+      z.object({
+        company: stringField,
+        role: stringField,
+        location: stringField,
+        startDate: stringField,
+        endDate: stringField,
+        bullets: stringList,
+      }),
+    )
+    .optional()
+    .default([]),
+  projects: z
+    .array(
+      z.object({
+        name: stringField,
+        technologies: stringList,
+        bullets: stringList,
+      }),
+    )
+    .optional()
+    .default([]),
+  education: z
+    .array(
+      z.object({
+        degree: stringField,
+        institution: stringField,
+        location: stringField,
+        date: stringField,
+        details: stringField,
+      }),
+    )
+    .optional()
+    .default([]),
+  certifications: stringList,
+  achievements: stringList,
+});
+
+const resumeResponseSchema = {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    location: { type: "string" },
+    phone: { type: "string" },
+    email: { type: "string" },
+    linkedin: { type: "string" },
+    github: { type: "string" },
+    portfolio: { type: "string" },
+    summary: { type: "string" },
+    skills: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          category: { type: "string" },
+          items: { type: "array", items: { type: "string" } },
+        },
+        required: ["category", "items"],
+      },
+    },
+    experience: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          company: { type: "string" },
+          role: { type: "string" },
+          location: { type: "string" },
+          startDate: { type: "string" },
+          endDate: { type: "string" },
+          bullets: { type: "array", items: { type: "string" } },
+        },
+        required: [
+          "company",
+          "role",
+          "location",
+          "startDate",
+          "endDate",
+          "bullets",
+        ],
+      },
+    },
+    projects: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          technologies: { type: "array", items: { type: "string" } },
+          bullets: { type: "array", items: { type: "string" } },
+        },
+        required: ["name", "technologies", "bullets"],
+      },
+    },
+    education: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          degree: { type: "string" },
+          institution: { type: "string" },
+          location: { type: "string" },
+          date: { type: "string" },
+          details: { type: "string" },
+        },
+        required: ["degree", "institution", "location", "date", "details"],
+      },
+    },
+    certifications: { type: "array", items: { type: "string" } },
+    achievements: { type: "array", items: { type: "string" } },
+  },
+  required: [
+    "name",
+    "location",
+    "phone",
+    "email",
+    "linkedin",
+    "github",
+    "portfolio",
+    "summary",
+    "skills",
+    "experience",
+    "projects",
+    "education",
+    "certifications",
+    "achievements",
   ],
 };
 
@@ -215,6 +332,7 @@ ${selfDescription}
 
 Job Description:
 ${jobDescription}`;
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: prompt,
@@ -223,99 +341,19 @@ ${jobDescription}`;
       responseSchema: geminiResponseSchema,
     },
   });
+
   const result = interviewReportSchema.parse(JSON.parse(response.text));
   console.log("GEMINI RESULT:", result);
   return result;
 }
 
-async function getPuppeteerLaunchOptions() {
-  console.log("Puppeteer version:", puppeteerPackage.version);
-  console.log(
-    "Puppeteer cache dir:",
-    process.env.PUPPETEER_CACHE_DIR || "default Puppeteer cache",
-  );
-
-  let executablePath;
-
-  try {
-    executablePath = await puppeteer.executablePath();
-  } catch (error) {
-    console.error("Puppeteer executable path lookup failed:", error.message);
-    throw error;
-  }
-
-  const executableExists = fs.existsSync(executablePath);
-
-  console.log("Puppeteer executable path:", executablePath);
-  console.log("Puppeteer executable exists:", executableExists);
-
-  if (!executableExists) {
-    throw new Error(
-      'Puppeteer Chrome executable is missing. Run "npm run build" during deployment.',
-    );
-  }
-
-  return {
-    headless: true,
-    executablePath,
-    args: puppeteerPdfArgs,
-  };
-}
-
-async function generatePdfFromHtml(htmlContent) {
-  const executablePath = puppeteer.executablePath();
-
-  console.log("========== PUPPETEER DEBUG ==========");
-  console.log("Puppeteer version:", require("puppeteer/package.json").version);
-  console.log("Executable:", executablePath);
-  console.log("Exists:", fs.existsSync(executablePath));
-  console.log("=====================================");
-
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-    ],
-  });
-
-  try {
-    const page = await browser.newPage();
-
-    await page.setContent(htmlContent, {
-      waitUntil: "networkidle0",
-    });
-
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-      margin: {
-        top: "10mm",
-        bottom: "10mm",
-        left: "10mm",
-        right: "10mm",
-      },
-    });
-
-    console.log("PDF size:", pdfBuffer.length);
-
-    return pdfBuffer;
-  } finally {
-    await browser.close();
-  }
-}
-
-async function generateResumePdf({ resume, selfDescription, jobDescription }) {
-  const resumePdfSchema = z.object({
-    html: z
-      .string()
-      .describe(
-        "The HTML content of the resume which can be converted to PDF using any library like puppeteer",
-      ),
-  });
+async function generateStructuredResume({
+  resume,
+  selfDescription,
+  jobDescription,
+}) {
   const prompt = `
-Generate a high-quality, professional, ATS-friendly SINGLE-PAGE resume for the candidate using the following information.
+Generate a high-quality, professional, ATS-friendly SINGLE-PAGE resume for the candidate using only structured JSON content.
 
 Candidate Resume:
 ${resume}
@@ -326,38 +364,19 @@ ${selfDescription}
 Target Job Description:
 ${jobDescription}
 
-
-========================
 PRIMARY OBJECTIVE
-========================
 
 Create a resume that maximizes the candidate's chances of getting an interview for the target job.
 
-The resume MUST fit on exactly ONE A4 page when rendered to PDF using Puppeteer.
+The content MUST be concise enough to fit on exactly one A4 page when rendered by a compact PDF resume template.
 
-This is a strict requirement.
-
-Do NOT generate a 2-page resume.
-
-Do NOT solve the page-length problem by simply making the font extremely small or making the resume difficult to read.
-
-Instead, intelligently prioritize, rewrite, combine, and condense information while preserving the most valuable content.
-
-
-========================
-CONTENT PRIORITIZATION
-========================
-
-Prioritize information according to its relevance to the target job description.
-
-Give the highest priority to:
-
-1. Relevant professional experience
-2. Relevant technical skills
-3. Strong measurable achievements
-4. Relevant projects
-5. Education
-6. Leadership, achievements, certifications, or other relevant information
+Prioritize:
+- relevant professional experience
+- relevant technical skills
+- measurable achievements
+- relevant projects
+- education
+- certifications or achievements only when meaningful for the target role
 
 Remove or shorten information that does not materially improve the candidate's chances of getting an interview.
 
@@ -375,13 +394,9 @@ Do not invent, exaggerate, or fabricate any experience, skills, achievements, me
 
 Only use information supported by the provided candidate information.
 
-
-========================
 CONTENT QUALITY
-========================
 
 The resume should:
-
 - Be tailored specifically to the target job description.
 - Highlight the candidate's strongest and most relevant experience.
 - Naturally incorporate important keywords from the job description where truthful and appropriate.
@@ -393,180 +408,24 @@ The resume should:
 - Avoid repeating the same information in multiple sections.
 - Focus on impact rather than responsibilities.
 
+SINGLE-PAGE CONTENT LIMITS
 
-========================
-SINGLE-PAGE REQUIREMENT
-========================
+Keep the response compact:
+- summary: 1 to 2 concise sentences
+- experience: maximum 3 roles
+- experience bullets: 2 to 4 bullets per role
+- projects: maximum 2 projects
+- project bullets: 1 to 3 bullets per project
+- skills: group related skills and avoid repetition
+- certifications and achievements: include only high-value items
 
-The final resume MUST fit on exactly ONE A4 page.
+Do not use placeholder values. If a field is unknown or unsupported by the input, return an empty string or an empty array.
 
-Use the available page space efficiently.
+Do NOT generate HTML, CSS, Markdown, PDF instructions, browser instructions, or browser-specific text.
 
-Use compact but highly readable formatting.
-
-Recommended typography:
-
-- Professional sans-serif font such as Arial, Helvetica, or similar.
-- Body font approximately 9.5–10.5px.
-- Section headings approximately 11–13px.
-- Candidate name approximately 18–22px.
-- Line-height approximately 1.1–1.25.
-- Small but readable spacing between sections.
-- Avoid excessive whitespace.
-- Keep bullet points concise.
-
-Do not use excessively large headings, large vertical gaps, oversized margins, or decorative elements that waste page space.
-
-If the content is too long, reduce content by prioritization and concise rewriting BEFORE significantly reducing font size.
-
-The resume should remain comfortable to read.
-
-
-========================
-RESUME STRUCTURE
-========================
-
-Use a clean professional structure similar to:
-
-HEADER
-- Candidate name
-- Location
-- Phone
-- Email
-- LinkedIn
-- GitHub / Portfolio when available
-
-SUMMARY
-- 2–3 concise lines
-- Tailored to the target role
-
-TECHNICAL SKILLS
-- Group related skills efficiently
-- Avoid unnecessary repetition
-
-EXPERIENCE
-- Most relevant experience first
-- Use concise bullet points
-- Prefer 2–4 high-impact bullets per role
-- Prioritize measurable achievements
-
-PROJECTS
-- Include only the most relevant projects
-- Prefer 1–2 highly relevant projects
-- Use concise bullets
-
-EDUCATION
-- Degree
-- Institution
-- Dates
-- Relevant information only
-
-ACHIEVEMENTS / LEADERSHIP / CERTIFICATIONS
-- Include only if they add meaningful value for the target role
-
-
-========================
-ATS REQUIREMENTS
-========================
-
-The resume MUST be ATS friendly.
-
-Use:
-
-- Standard section headings
-- Plain text content
-- Standard readable fonts
-- Simple one-column layout
-- Normal HTML text elements
-- Proper semantic structure
-- Standard bullet points
-- Clearly identifiable sections
-
-Avoid:
-
-- Tables for primary resume layout
-- Multi-column layouts
-- Text embedded inside images
-- Icons replacing text
-- Graphics
-- Skill bars
-- Progress bars
-- Decorative charts
-- Excessive colors
-- Complex positioning
-- Important information hidden using CSS
-- Headers/footers containing critical information
-
-The resume should remain easily parsable by ATS systems.
-
-
-========================
-VISUAL DESIGN
-========================
-
-The design should be:
-
-- Simple
-- Professional
-- Modern
-- Clean
-- Elegant
-- ATS friendly
-
-You may use a subtle accent color for section headings or separators, but keep the design professional and restrained.
-
-Do not use heavy backgrounds, excessive colors, large graphical elements, or decorative designs.
-
-The resume should look like a strong professional resume, not an AI-generated template.
-
-
-========================
-HTML REQUIREMENTS
-========================
-
-Return a JSON object with exactly one field:
-
-{
-  "html": "..."
-}
-
-The html field must contain the complete HTML document that can be directly rendered by Puppeteer.
-
-The HTML should include:
-
-- <!DOCTYPE html>
-- <html>
-- <head>
-- <meta charset="UTF-8">
-- Appropriate CSS
-- <body>
-
-Use CSS designed specifically for an A4 single-page resume.
-
-Include:
-
-@page {
-    size: A4;
-    margin: 10mm;
-}
-
-Use a single-column layout.
-
-Do not use external resources that may fail to load during Puppeteer rendering.
-
-Do not use external images.
-
-The HTML must be self-contained.
-
-Make sure all important content is visible in the generated PDF.
-
-
-========================
 FINAL QUALITY CHECK
-========================
 
-Before returning the HTML, internally verify that:
-
+Before returning the JSON, internally verify that:
 1. The resume is tailored to the target job.
 2. The most relevant skills and experience are emphasized.
 3. Important achievements are preserved.
@@ -574,25 +433,25 @@ Before returning the HTML, internally verify that:
 5. There is no unnecessary repetition.
 6. The resume is ATS friendly.
 7. The resume is concise.
-8. The resume is visually professional.
-9. The resume is designed to fit on ONE A4 page.
-10. The resume remains readable at the specified font sizes.
+8. The content is professional.
+9. The resume content is concise enough for ONE A4 page.
+10. The resume uses only facts supported by the inputs.
 
 If there is too much content, reduce low-value content and shorten bullet points rather than creating a second page.
 
-Return ONLY the JSON object with the "html" field.
+Return ONLY a JSON object matching the response schema.
 `;
+
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
-      responseSchema: zodToJsonSchema(resumePdfSchema),
+      responseSchema: resumeResponseSchema,
     },
   });
-  const jsonContent = JSON.parse(response.text);
-  const pdfBuffer = await generatePdfFromHtml(jsonContent.html);
-  return pdfBuffer;
+
+  return resumeDataSchema.parse(JSON.parse(response.text));
 }
 
-module.exports = { generateInterviewReport, generateResumePdf };
+module.exports = { generateInterviewReport, generateStructuredResume };
