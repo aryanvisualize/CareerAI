@@ -1,154 +1,202 @@
-AI-Powered Job Preparation & Resume Intelligence Platform
+<div align="center">
 
-# 🚀 CareerAI — AI-Powered Job Preparation Platform
+# 🚀 CareerAI
 
-> **CareerAI** is a production-ready Full Stack Generative AI web application designed to help job seekers prepare smarter by analyzing resumes, identifying skill gaps, optimizing resumes for ATS systems, and generating personalized AI-powered interview questions.
+### 🧬 Generative AI Project — AI-Powered Job Preparation & Resume Intelligence Platform
 
-Built with **React.js, Node.js, Express.js, JWT, Gemini AI, and Puppeteer**, CareerAI simulates a real-world SaaS product combining secure authentication, document processing, AI integration, and dynamic PDF generation.
+[![Generative AI](https://img.shields.io/badge/Generative_AI-FF6F61?style=for-the-badge&logo=openai&logoColor=white)](https://ai.google.dev/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![Gemini AI](https://img.shields.io/badge/Gemini_AI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![PDFKit](https://img.shields.io/badge/PDFKit-D6001C?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://pdfkit.org/)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/aryanvisualize/CareerAI/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/commits/main)
+
+[**Live Demo**](#) · [**Report Bug**](https://github.com/aryanvisualize/CareerAI/issues) · [**Request Feature**](https://github.com/aryanvisualize/CareerAI/issues)
+
+</div>
+
+<br>
+
+<div align="center">
+<img src="./docs/careerai-preview.png" alt="CareerAI Preview" width="90%">
+</div>
+
+<br>
+
+## 📋 Table of Contents
+
+<details open>
+<summary>Click to expand/collapse</summary>
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Architecture](#️-architecture)
+- [Tech Stack](#️-tech-stack)
+- [Application Workflow](#-application-workflow)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#️-environment-variables)
+- [API Reference](#-api-reference)
+- [Security](#️-security-considerations)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
+
+</details>
+
+---
+
+## 🌟 Overview
+
+**CareerAI is a Generative AI project** — a production-ready, Full Stack GenAI web application that helps job seekers prepare smarter. It uses **Google Gemini** as its generative intelligence layer to analyze resumes, identify skill gaps against target job descriptions, optimize resumes for ATS systems, and generate personalized AI-powered interview questions — all in one platform.
+
+Built with **React.js, Node.js, Express.js, JWT, Google Gemini AI, and PDFKit**, CareerAI simulates a real-world SaaS product combining secure authentication, document processing, generative AI integration, and dynamic PDF generation.
+
+> **One platform. One resume. One target job. Smarter preparation.**
 
 ---
 
 ## ✨ Features
 
-### 🔐 Secure Authentication
+<table>
+<tr>
+<td width="50%" valign="top">
 
-* User registration and login
-* JWT-based authentication
-* Secure protected routes
-* JWT token blacklisting
-* Logout and session invalidation
-* Middleware-based authorization
+### 🔐 Secure Authentication
+- User registration and login
+- JWT-based authentication
+- Secure protected routes
+- JWT token blacklisting
+- Logout and session invalidation
+- Middleware-based authorization
 
 ### 📄 Resume Processing
-
-* Upload resumes through the web application
-* Parse resume content
-* Extract skills, experience, education, and other relevant information
-* Convert unstructured resume data into structured information
+- Upload resumes through the web app
+- Parse resume content
+- Extract skills, experience, education
+- Convert unstructured data into structured JSON
 
 ### 🎯 Job Description Analysis
+- AI-driven job description parsing
+- Extract required skills and qualifications
+- Identify important keywords
+- Compare job requirements with candidate skills
 
-* Analyze job descriptions using AI
-* Extract required skills and qualifications
-* Identify important keywords
-* Compare job requirements with candidate skills
+</td>
+<td width="50%" valign="top">
 
 ### 🧠 AI-Powered Skill Gap Detection
-
-* Compare resume skills against job requirements
-* Identify missing or weak skills
-* Highlight areas that need improvement
-* Provide actionable preparation recommendations
+- Compare resume skills vs. job requirements
+- Identify missing or weak skills
+- Highlight areas needing improvement
+- Actionable preparation recommendations
 
 ### 🤖 AI Interview Preparation
-
-* Generate personalized interview questions
-* Create questions based on:
-
-  * Resume
-  * Job description
-  * Candidate skills
-  * Missing skills
-* Support technical and behavioral interview preparation
+- Personalized interview question generation
+- Based on resume, JD, skills & gaps
+- Technical + behavioral question support
 
 ### 📈 ATS-Optimized Resume Generation
+- AI-generated, keyword-optimized content
+- Job-specific resume versions
+- Programmatic PDF generation via PDFKit
 
-* Generate improved resume content using AI
-* Optimize content around relevant job-description keywords
-* Improve resume structure and readability
-* Create job-specific resume versions
-
-### 📑 Dynamic PDF Generation
-
-* Generate professional resume PDFs
-* Convert dynamically generated HTML/CSS into PDF
-* Use **Puppeteer** for browser-based PDF rendering
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🏗️ Architecture
 
-```text
-                    ┌──────────────────────┐
-                    │       CareerAI       │
-                    │   React Frontend     │
-                    └──────────┬───────────┘
-                               │
-                               │ REST API
-                               ▼
-                    ┌──────────────────────┐
-                    │    Node.js +         │
-                    │    Express.js        │
-                    └──────────┬───────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              │                │                │
-              ▼                ▼                ▼
-       ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-       │    Auth     │  │ Resume      │  │     Job     │
-       │ JWT +       │  │ Processing  │  │ Description │
-       │ Blacklist   │  │             │  │ Analysis    │
-       └─────────────┘  └──────┬──────┘  └──────┬──────┘
-                               │                │
-                               └───────┬────────┘
-                                       ▼
-                              ┌────────────────┐
-                              │   Gemini AI    │
-                              │ AI Processing  │
-                              └───────┬────────┘
-                                      │
-                     ┌────────────────┼────────────────┐
-                     ▼                ▼                ▼
-              Skill Gap         Interview        ATS Resume
-               Analysis          Questions        Generation
-                                                       │
-                                                       ▼
-                                               ┌────────────┐
-                                               │ Puppeteer  │
-                                               │ PDF Engine │
-                                               └────────────┘
+```mermaid
+flowchart TD
+    A["🖥️ React Frontend"] -->|REST API| B["⚙️ Node.js + Express.js"]
+
+    B --> C["🔐 Auth<br/>JWT + Blacklist"]
+    B --> D["📄 Resume Processing"]
+    B --> E["🎯 Job Description Analysis"]
+
+    D --> F["🧠 Gemini AI Engine"]
+    E --> F
+
+    F --> G["📊 Skill Gap Analysis"]
+    F --> H["🤖 Interview Questions"]
+    F --> I["📈 ATS Resume Generation"]
+
+    I --> J["🖨️ PDFKit PDF Engine"]
+    J --> K["⬇️ Downloadable PDF Resume"]
+
+    style A fill:#61DAFB,color:#000
+    style B fill:#339933,color:#fff
+    style F fill:#8E75B2,color:#fff
+    style J fill:#40B5A4,color:#fff
+    style K fill:#f5a623,color:#000
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React.js, JavaScript, HTML5, CSS3, REST API integration |
+| **Backend** | Node.js, Express.js, RESTful APIs, Middleware architecture |
+| **Authentication** | JSON Web Token (JWT), Token blacklisting, Protected routes |
+| **Artificial Intelligence** | Google Gemini API — resume analysis, skill extraction, JD analysis, interview generation, ATS optimization |
+| **PDF Generation** | PDFKit — programmatic, code-driven PDF generation |
 
-* **React.js**
-* JavaScript
-* HTML5
-* CSS3
-* REST API integration
+---
 
-### Backend
+## 🔄 Application Workflow
 
-* **Node.js**
-* **Express.js**
-* RESTful APIs
-* Middleware architecture
+```mermaid
+sequenceDiagram
+    actor User
+    participant App as CareerAI App
+    participant AI as Gemini AI
+    participant PDF as PDFKit
 
-### Authentication
+    User->>App: Create account & log in
+    User->>App: Upload resume
+    App->>AI: Extract skills, education, experience
+    User->>App: Paste job description
+    App->>AI: Analyze JD (skills, keywords, requirements)
+    AI-->>App: Matching & missing skills
+    App-->>User: Skill gap report + recommendations
+    AI-->>App: Personalized interview questions
+    App-->>User: Interview prep set
+    AI-->>App: ATS-optimized resume content
+    App->>PDF: Generate PDF document
+    PDF-->>User: Download tailored resume
+```
 
-* **JSON Web Token (JWT)**
-* JWT token blacklisting
-* Protected API routes
-* Authentication middleware
+<details>
+<summary><b>📊 Skill Gap Analysis — detail view</b></summary>
 
-### Artificial Intelligence
+```text
+   Candidate Skills          Job Requirements
+          │                         │
+          └───────────┬─────────────┘
+                       ▼
+                  AI Analysis
+                       ▼
+        ┌───────────────────────────┐
+        │      Matching Skills      │
+        │      Missing Skills       │
+        │      Recommendations      │
+        └───────────────────────────┘
+```
 
-* **Google Gemini API**
-* Resume analysis
-* Skill extraction
-* Job description analysis
-* Skill-gap detection
-* Interview question generation
-* ATS resume optimization
-
-### PDF Generation
-
-* **Puppeteer**
-* Dynamic HTML-to-PDF generation
+</details>
 
 ---
 
@@ -157,7 +205,7 @@ Built with **React.js, Node.js, Express.js, JWT, Gemini AI, and Puppeteer**, Car
 ```text
 CareerAI/
 │
-├── client/
+├── client/                  # React frontend
 │   ├── public/
 │   └── src/
 │       ├── components/
@@ -167,7 +215,7 @@ CareerAI/
 │       ├── utils/
 │       └── App.jsx
 │
-├── server/
+├── server/                  # Node.js / Express backend
 │   ├── controllers/
 │   ├── middleware/
 │   ├── routes/
@@ -176,7 +224,7 @@ CareerAI/
 │   ├── models/
 │   └── server.js
 │
-├── uploads/
+├── uploads/                 # Uploaded resume storage
 │
 ├── .env
 ├── .gitignore
@@ -188,178 +236,77 @@ CareerAI/
 
 ---
 
-## 🔄 Application Workflow
+## 🚀 Getting Started
 
-### 1. Create an Account
+### Prerequisites
 
-The user creates an account and securely logs into CareerAI.
+- [Node.js](https://nodejs.org/) & npm
+- [Git](https://git-scm.com/)
+- A **Gemini API key**
+- A supported database (if used by your implementation)
 
-### 2. Upload Resume
+<details>
+<summary><b>1️⃣ Clone the repository</b></summary>
 
-The user uploads their existing resume for analysis.
-
-### 3. Resume Analysis
-
-CareerAI processes the resume and extracts important information such as:
-
-* Skills
-* Education
-* Experience
-* Projects
-* Certifications
-* Technologies
-
-### 4. Add Job Description
-
-The user provides the job description for the position they are targeting.
-
-### 5. AI Job Analysis
-
-Gemini AI analyzes the job description and identifies:
-
-* Required skills
-* Preferred skills
-* Important keywords
-* Technical requirements
-* Relevant qualifications
-
-### 6. Skill Gap Analysis
-
-CareerAI compares the candidate's resume against the job requirements and identifies missing skills.
-
-```text
-Candidate Skills
-       +
-Job Requirements
-       ↓
-   AI Analysis
-       ↓
- ┌───────────────┐
- │ Matching Skills│
- │ Missing Skills │
- │ Recommendations│
- └───────────────┘
+```bash
+git clone https://github.com/aryanvisualize/CareerAI.git
+cd CareerAI
 ```
 
-### 7. Interview Preparation
+</details>
 
-The AI generates personalized interview questions based on the candidate's profile and target job.
+<details>
+<summary><b>2️⃣ Install backend dependencies</b></summary>
 
-### 8. ATS Resume Optimization
-
-CareerAI generates an improved, job-specific resume optimized around relevant ATS keywords.
-
-### 9. PDF Generation
-
-The optimized resume is rendered into a professional PDF using Puppeteer.
-
----
-
-## 🔑 Core Modules
-
-| Module              | Description                                               |
-| ------------------- | --------------------------------------------------------- |
-| Authentication      | Secure user registration, login, logout and authorization |
-| Resume Processing   | Extract useful information from uploaded resumes          |
-| Job Analysis        | Analyze job descriptions and required skills              |
-| Skill Gap Detection | Identify missing skills and qualifications                |
-| AI Interview Prep   | Generate personalized interview questions                 |
-| Resume Optimization | Generate ATS-friendly resume content                      |
-| PDF Generation      | Create downloadable professional PDF resumes              |
-
----
-
-## 🤖 AI Integration
-
-CareerAI uses the **Gemini API** as the intelligence layer of the application.
-
-A typical workflow looks like:
-
-```text
-Resume
-   ↓
-Resume Data Extraction
-   ↓
-Structured Candidate Profile
-   ↓
-        Gemini AI
-   ↑
-Job Description
-   ↓
-Job Requirement Extraction
-   ↓
-Skill Comparison
-   ↓
-AI Insights
-   ├── Skill Gaps
-   ├── Interview Questions
-   └── ATS Resume Suggestions
+```bash
+cd server
+npm install
 ```
 
----
+</details>
 
-## 🔐 Authentication Flow
+<details>
+<summary><b>3️⃣ Configure environment variables</b></summary>
 
-CareerAI uses JWT-based authentication.
+Create a `.env` file inside `server/` — see [Environment Variables](#️-environment-variables) below.
 
-```text
-User Login
-    ↓
-Credentials Validation
-    ↓
-JWT Token Generated
-    ↓
-Token Sent to Client
-    ↓
-Authenticated API Request
-    ↓
-JWT Verification Middleware
-    ↓
-Protected Resource
+</details>
+
+<details>
+<summary><b>4️⃣ Start the backend</b></summary>
+
+```bash
+npm run dev
 ```
 
-When a user logs out, the token can be added to a **blacklist**, preventing further use of that token.
+</details>
 
----
+<details>
+<summary><b>5️⃣ Install frontend dependencies</b></summary>
 
-## 📄 ATS Resume Generation
-
-CareerAI focuses on generating resumes that are:
-
-* Relevant to the target job
-* Keyword optimized
-* Easy for ATS systems to parse
-* Professionally structured
-* Focused on measurable achievements
-* Tailored to the job description
-
-The generated resume can then be converted into a PDF using Puppeteer.
-
----
-
-## 🖨️ PDF Generation with Puppeteer
-
-CareerAI uses Puppeteer to generate dynamic PDF documents.
-
-```text
-AI Generated Resume
-        ↓
-Dynamic HTML Template
-        ↓
-      Puppeteer
-        ↓
-    PDF Document
-        ↓
-   Download Resume
+```bash
+cd client
+npm install
 ```
 
-This allows the application to generate consistently formatted resumes directly from the backend.
+</details>
+
+<details>
+<summary><b>6️⃣ Start the frontend</b></summary>
+
+```bash
+npm run dev
+```
+
+The app will be available at the local development URL shown in your terminal.
+
+</details>
 
 ---
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file inside the backend/server directory:
+Create a `.env` file inside the `server/` directory:
 
 ```env
 PORT=5000
@@ -372,78 +319,14 @@ GEMINI_API_KEY=your_gemini_api_key
 DATABASE_URL=your_database_url
 ```
 
-> Never commit your `.env` file or API keys to GitHub.
+> ⚠️ **Never commit your `.env` file or API keys to GitHub.**
 
 ---
 
-## 🚀 Installation & Setup
+## 🔌 API Reference
 
-### Prerequisites
-
-Make sure you have installed:
-
-* Node.js
-* npm
-* Git
-* A Gemini API key
-* A supported database, if used by your implementation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/career-ai.git
-
-cd career-ai
-```
-
-### 2. Install Backend Dependencies
-
-```bash
-cd server
-
-npm install
-```
-
-### 3. Configure Environment Variables
-
-Create a `.env` file and add the required configuration.
-
-```env
-PORT=5000
-JWT_SECRET=your_secret
-GEMINI_API_KEY=your_api_key
-DATABASE_URL=your_database_url
-```
-
-### 4. Start the Backend
-
-```bash
-npm run dev
-```
-
-### 5. Install Frontend Dependencies
-
-Open another terminal:
-
-```bash
-cd client
-
-npm install
-```
-
-### 6. Start the Frontend
-
-```bash
-npm run dev
-```
-
-The application should now be available through the local development URL shown by your frontend development server.
-
----
-
-## 🔌 Example API Structure
-
-The exact endpoints depend on your implementation, but the backend can be organized like this:
+<details>
+<summary><b>Expand full endpoint list</b></summary>
 
 ```text
 /api/auth
@@ -469,157 +352,86 @@ The exact endpoints depend on your implementation, but the backend can be organi
     POST /generate
 ```
 
+> Exact endpoints depend on your implementation.
+
+</details>
+
 ---
 
 ## 🛡️ Security Considerations
 
-CareerAI is designed with real-world application security in mind.
-
-Key considerations include:
-
-* JWT authentication
-* Protected routes
-* Token blacklisting
-* Environment variables for secrets
-* Input validation
-* Secure API endpoints
-* Controlled file uploads
-* Error handling
-* API key protection
-* Avoiding sensitive information in logs
+| Consideration | Implementation |
+|---|---|
+| Authentication | JWT-based, with protected routes |
+| Session control | Token blacklisting on logout |
+| Secrets management | Environment variables (`.env`) |
+| Input validation | Sanitized request payloads |
+| File uploads | Controlled, validated upload handling |
+| Error handling | Centralized error middleware |
+| Logging | No sensitive data in logs |
 
 ---
 
-## 📌 Future Improvements
+## 📌 Roadmap
 
-Potential future features include:
-
-* 🔎 Job search and job recommendations
-* 📊 Resume ATS scoring
-* 💼 LinkedIn profile analysis
-* 🎤 AI voice interview simulation
-* 🗣️ Real-time interview conversations
-* 📈 Interview performance analytics
-* 🧑‍💼 Personalized career roadmap
-* 📚 AI-generated learning plans
-* 🔔 Job application tracking
-* 🌐 Multi-language resume generation
-* ☁️ Cloud file storage
-* 📱 Mobile-responsive improvements
-* 👥 Recruiter/company dashboard
+- [ ] 🔎 Job search and job recommendations
+- [ ] 📊 Resume ATS scoring
+- [ ] 💼 LinkedIn profile analysis
+- [ ] 🎤 AI voice interview simulation
+- [ ] 🗣️ Real-time interview conversations
+- [ ] 📈 Interview performance analytics
+- [ ] 🧑‍💼 Personalized career roadmap
+- [ ] 📚 AI-generated learning plans
+- [ ] 🔔 Job application tracking
+- [ ] 🌐 Multi-language resume generation
+- [ ] ☁️ Cloud file storage
+- [ ] 📱 Mobile-responsive improvements
+- [ ] 👥 Recruiter/company dashboard
 
 ---
 
-## 🎯 Project Goals
 
-CareerAI was built to demonstrate how modern web technologies and Generative AI can be combined to create a practical, production-style application.
+## 🎯 Project Goals & Learning Outcomes
 
-The project demonstrates:
+CareerAI is a **Generative AI project** built to demonstrate how modern web technologies and GenAI can combine into a practical, production-style application — covering full stack development, REST API design, JWT authorization, generative AI API integration, NLP, prompt engineering, and PDF automation.
 
-* Full Stack Web Development
-* REST API Design
-* Secure Authentication
-* JWT Authorization
-* AI API Integration
-* Resume Processing
-* Natural Language Processing
-* Prompt Engineering
-* Document Generation
-* PDF Automation
-* Real-World Application Architecture
-
----
-
-## 🧪 Learning Outcomes
-
-By building CareerAI, developers can gain practical experience with:
-
-```text
-React.js
-   +
-Node.js
-   +
-Express.js
-   +
-JWT Authentication
-   +
-Gemini AI
-   +
-Resume Processing
-   +
-Prompt Engineering
-   +
-Puppeteer
-   ↓
-Full Stack Generative AI Application
+```mermaid
+flowchart LR
+    A[React.js] --> F[Full Stack<br/>Generative AI App]
+    B[Node.js] --> F
+    C[Express.js] --> F
+    D[JWT Auth] --> F
+    E[Gemini AI] --> F
+    G[PDFKit] --> F
 ```
 
 ---
 
-## 📸 Screenshots
+## 🤝 Contributing
 
-Add your application screenshots here:
+Contributions are welcome! To contribute:
 
-```text
-docs/
-├── dashboard.png
-├── resume-analysis.png
-├── skill-gap.png
-├── interview-prep.png
-└── resume-generator.png
-```
-
-Example:
-
-```markdown
-![CareerAI Dashboard](./docs/dashboard.png)
-```
-
----
-
-## 🌟 Why CareerAI?
-
-Traditional job preparation often requires using multiple tools:
-
-```text
-Resume Builder
-      +
-ATS Checker
-      +
-Job Description Analyzer
-      +
-Interview Preparation
-      +
-Skill Analysis
-```
-
-CareerAI brings these capabilities together into a single AI-powered platform.
-
-> **One platform. One resume. One target job. Smarter preparation.**
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Aryan**
+Full Stack Developer · AI/ML Enthusiast
 
-Full Stack Developer | Generative AI Enthusiast
-
-* GitHub: `https://github.com/your-username`
-* LinkedIn: `https://linkedin.com/in/your-profile`
+GitHub: [github.com/aryanvisualize](https://github.com/aryanvisualize) · LinkedIn: [linkedin.com/in/aryan-rastogi-dev](https://www.linkedin.com/in/aryan-rastogi-dev/)
 
 ---
 
-## 📜 License
+<div align="center">
 
-This project is licensed under the **MIT License**.
+### ⭐ If you found this project useful, consider giving it a star!
 
-See the `LICENSE` file for more information.
+**A Generative AI project built with ❤️ using React, Node.js, Express.js, Gemini AI, JWT, and PDFKit.**
 
----
-
-## ⭐ Support
-
-If you found this project useful or interesting, consider giving the repository a ⭐ on GitHub.
-
-**Built with ❤️ using React, Node.js, Express.js, Gemini AI, JWT, and Puppeteer.**
+</div>
