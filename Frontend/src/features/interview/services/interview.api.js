@@ -32,7 +32,7 @@ export const generateInterviewReport = async ({
         formData.append("resume", resumeFile);
     }
 
-    const response = await api.post("/api/interview/", formData);
+    const response = await api.post("/api/interview", formData);
 
     return response.data;
 };
@@ -52,7 +52,7 @@ export const getInterviewReportById = async (interviewId) => {
  * @description Service to get all interview reports of logged in user.
  */
 export const getAllInterviewReports = async () => {
-    const response = await api.get("/api/interview/");
+    const response = await api.get("/api/interview");
 
     return response.data;
 };
