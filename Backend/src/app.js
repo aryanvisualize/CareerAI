@@ -6,10 +6,16 @@ const cors = require("cors")
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    process.env.FRONTEND_URL
-].filter(Boolean);
+const allowedOrigins = process.env.FRONTEND_URLS
+  .split(",")
+  .map(origin => origin.trim());
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 app.use(
     cors({
