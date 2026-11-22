@@ -17,12 +17,21 @@ const Home = () => {
     const [ generationError, setGenerationError ] = useState("")
     const [ isGenerating, setIsGenerating ] = useState(false)
     const [ isDragging, setIsDragging ] = useState(false)
+    const [ showAllReports, setShowAllReports ] = useState(false)
+    const [ reportSearch, setReportSearch ] = useState('')
     const jobDescriptionRef = useRef()
     const selfDescriptionRef = useRef()
     const resumeInputRef = useRef()
     const dragCounterRef = useRef(0)
 
     const navigate = useNavigate()
+    const sortedReports = [...(reports || [])].sort((first, second) =>
+        (Date.parse(second.createdAt) || 0) - (Date.parse(first.createdAt) || 0)
+    )
+    const reportQuery = reportSearch.trim().toLowerCase()
+    const visibleReports = showAllReports
+        ? sortedReports.filter(report => (report.title || 'Untitled Position').toLowerCase().includes(reportQuery))
+        : sortedReports.slice(0, 6)
 
     const formatFileSize = (sizeInBytes) => {
         if (!sizeInBytes && sizeInBytes !== 0) return ''
@@ -358,16 +367,73 @@ const Home = () => {
             {/* Recent Reports List */}
             {reports.length > 0 && (
                 <section className='recent-reports'>
-                    <h2>My Recent Interview Plans</h2>
-                    <ul className='reports-list'>
-                        {reports.map(report => (
-                            <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
-                                <h3>{report.title || 'Untitled Position'}</h3>
-                                <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
-                                <p className={`match-score ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>Match Score: {report.matchScore}%</p>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className='recent-reports__header'>
+                        <h2>{showAllReports ? 'All Interview Plans' : 'Recent Interview Plans'}</h2>
+                        {reports.length > 6 && (
+                            <button
+                                type='button'
+                                className='reports-toggle'
+                                onClick={() => {
+                                    setShowAllReports(showingAll => !showingAll)
+                                    setReportSearch('')
+                                }}>
+                                {showAllReports ? 'Show recent' : `View all ${reports.length}`}
+                            </button>
+                        )}
+                    </div>
+                    <div className='reports-toolbar'>
+                        <p className='reports-count'>
+                            {showAllReports
+                                ? `${visibleReports.length} of ${reports.length} plans`
+                                : `Showing latest ${visibleReports.length} ${visibleReports.length === 1 ? 'plan' : 'plans'}`}
+                        </p>
+                        {showAllReports && (
+                            <label className='report-search' htmlFor='reportSearch'>
+                                <span>Search plans</span>
+                                <input
+                                    id='reportSearch'
+                                    type='search'
+                                    value={reportSearch}
+                                    onChange={(e) => setReportSearch(e.target.value)}
+                                    placeholder='Search by job title'
+                                />
+                            </label>
+                        )}
+                    </div>
+                    {visibleReports.length > 0 ? (
+                        <ul className='reports-list'>
+                            {visibleReports.map(report => {
+                                const title = report.title || 'Untitled Position'
+                                const scoreClass = report.matchScore >= 80
+                                    ? 'score--high'
+                                    : report.matchScore >= 60 ? 'score--mid' : 'score--low'
+
+                                return (
+                                    <li key={report._id} className='report-item'>
+                                        <button
+                                            type='button'
+                                            className='report-card'
+                                            onClick={() => navigate(`/interview/${report._id}`)}>
+                                            <h3 title={title}>{title}</h3>
+                                            <div className='report-card__meta'>
+                                                <time dateTime={report.createdAt}>
+                                                    {new Date(report.createdAt).toLocaleDateString(undefined, {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric',
+                                                    })}
+                                                </time>
+                                                <span className={`report-score ${scoreClass}`}>{report.matchScore}% match</span>
+                                            </div>
+                                            <span className='report-card__action'>Open plan <span aria-hidden='true'>→</span></span>
+                                        </button>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    ) : (
+                        <p className='reports-empty'>No plans match “{reportSearch}”. Try another title.</p>
+                    )}
                 </section>
             )}
 
