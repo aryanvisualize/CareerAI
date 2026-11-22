@@ -28,18 +28,14 @@ const Home = () => {
     const getFileTypeLabel = (file) => {
         const extension = file.name.split('.').pop()?.toLowerCase()
         if (extension === 'pdf') return 'PDF'
-        if (extension === 'docx') return 'DOCX'
         return 'File'
     }
 
     const isValidResumeFile = (file) => {
         const maxSize = 5 * 1024 * 1024
         const lowerName = file.name.toLowerCase()
-        const validByName = lowerName.endsWith('.pdf') || lowerName.endsWith('.docx')
-        const validMimeTypes = [
-            'application/pdf',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        ]
+        const validByName = lowerName.endsWith('.pdf')
+        const validMimeTypes = ['application/pdf']
         const validByType = !file.type || validMimeTypes.includes(file.type)
 
         return validByName && validByType && file.size <= maxSize
@@ -195,7 +191,7 @@ const Home = () => {
                                 {!resumeFile && (
                                     <>
                                         <p className='dropzone__title'>{isDragging ? 'Drop your resume here' : 'Click to upload or drag & drop'}</p>
-                                        <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
+                                        <p className='dropzone__subtitle'>PDF only (Max 5MB)</p>
                                     </>
                                 )}
                                 {resumeFile && (
@@ -206,7 +202,7 @@ const Home = () => {
                                         <p className='dropzone__file-meta'>{getFileTypeLabel(resumeFile)} • {formatFileSize(resumeFile.size)}</p>
                                     </div>
                                 )}
-                                <input ref={resumeInputRef} onChange={handleFileChange} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                <input ref={resumeInputRef} onChange={handleFileChange} hidden type='file' id='resume' name='resume' accept='.pdf,application/pdf' />
                             </label>
                         </div>
 

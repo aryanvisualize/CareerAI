@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
@@ -28,8 +29,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/interview", interviewRouter);
 
 app.get("/health", (req, res) => {
-    res.status(200).json({
-        status: "ok",
+    const databaseStates = ["disconnected", "connected", "connecting", "disconnecting"];
+    const databaseState = databaseStates[mongoose.connection.readyState] || "unknown";
+    const isReady = mongoose.connection.readyState === 1;
+
+    res.status(isReady ? 200 : 503).json({
+        status: isReady ? "ok" : "not_ready",
+        database: databaseState,
         env: process.env.NODE_ENV || "development",
     });
 });
