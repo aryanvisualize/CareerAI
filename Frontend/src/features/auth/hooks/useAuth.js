@@ -5,7 +5,6 @@ import {
   register,
   logout,
   getMe,
-  updateReportReadyEmailPreference,
 } from "../services/auth.api";
 
 export const useAuth = () => {
@@ -54,20 +53,6 @@ export const useAuth = () => {
     }
   };
 
-  const handleUpdateReportReadyEmailPreference = async (enabled) => {
-    try {
-      const data = await updateReportReadyEmailPreference(enabled);
-      setUser(data.user);
-      return true;
-    } catch (error) {
-      console.error(
-        "Failed to update email preference:",
-        error.response?.data || error.message,
-      );
-      return false;
-    }
-  };
-
   useEffect(() => {
     const getAndSetUser = async () => {
       try {
@@ -93,6 +78,5 @@ export const useAuth = () => {
     handleRegister,
     handleLogin,
     handleLogout,
-    handleUpdateReportReadyEmailPreference,
   };
 };

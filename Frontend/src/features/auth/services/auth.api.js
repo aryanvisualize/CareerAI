@@ -61,10 +61,3 @@ export async function getMe() {
     }
 }
 
-export async function updateReportReadyEmailPreference(reportReadyEmailOptIn) {
-    const response = await api.patch('/api/auth/email-preferences', {
-        reportReadyEmailOptIn
-    });
-
-    return response.data;
-}

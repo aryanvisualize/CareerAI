@@ -8,13 +8,11 @@ import { useAuth } from '../../auth/hooks/useAuth.js'
 const Home = () => {
 
     const { loading, generateReport,reports } = useInterview()
-    const { user, handleLogout, handleUpdateReportReadyEmailPreference } = useAuth()
+    const { handleLogout } = useAuth()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ resumeFile, setResumeFile ] = useState(null)
     const [ isDragging, setIsDragging ] = useState(false)
-    const [ preferenceSaving, setPreferenceSaving ] = useState(false)
-    const [ preferenceMessage, setPreferenceMessage ] = useState("")
     const resumeInputRef = useRef()
     const dragCounterRef = useRef(0)
 
@@ -117,17 +115,6 @@ const Home = () => {
         }
     }
 
-    const handleEmailPreferenceChange = async (e) => {
-        setPreferenceSaving(true)
-        setPreferenceMessage("")
-
-        const saved = await handleUpdateReportReadyEmailPreference(e.target.checked)
-        setPreferenceMessage(saved
-            ? "Email preference saved."
-            : "Could not save your email preference. Please try again.")
-        setPreferenceSaving(false)
-    }
-
     if (loading) {
         return (
             <main className='loading-screen'>
@@ -140,26 +127,12 @@ const Home = () => {
 
             <header className='app-header'>
                 <span className='app-header__brand'>CareerAI</span>
-                <div className='app-header__actions'>
-                    <div className='app-header__email-preference'>
-                        <label>
-                            <input
-                                type='checkbox'
-                                checked={Boolean(user?.reportReadyEmailOptIn)}
-                                onChange={handleEmailPreferenceChange}
-                                disabled={preferenceSaving}
-                            />
-                            Email me when an interview plan is ready
-                        </label>
-                        {preferenceMessage && <span role='status'>{preferenceMessage}</span>}
-                    </div>
-                    <button
-                        type='button'
-                        onClick={onLogout}
-                        className='generate-btn generate-btn--ghost'>
-                        Logout
-                    </button>
-                </div>
+                <button
+                    type='button'
+                    onClick={onLogout}
+                    className='generate-btn generate-btn--ghost'>
+                    Logout
+                </button>
             </header>
 
             {/* Page Header */}
