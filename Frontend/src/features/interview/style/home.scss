@@ -190,10 +190,13 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
         padding: 1rem;
 
         &__textarea {
+            height: 180px;
             min-height: 180px;
+            max-height: 360px;
 
             &--short {
                 min-height: 110px;
+                max-height: 220px;
                 height: auto;
             }
         }
@@ -249,7 +252,7 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 
     &__body {
         display: flex;
-        min-height: 520px;
+        min-height: 0;
     }
 
     &__footer {
@@ -301,8 +304,12 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
     }
 
     &__textarea {
-        flex: 1;
+        flex: 0 0 auto;
         width: 100%;
+        height: 220px;
+        min-height: 220px;
+        max-height: 420px;
+        overflow-y: auto;
         background-color: $bg-input;
         border: 1px solid $border-color;
         border-radius: 0.5rem;
@@ -323,19 +330,26 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
             border-color: $accent;
         }
 
+        &--error {
+            border-color: #ff6b6b;
+
+            &:focus {
+                border-color: #ff6b6b;
+            }
+        }
+
         &--short {
             flex: unset;
             height: 96px;
+            min-height: 96px;
+            max-height: 240px;
         }
     }
 
     &--left {
-        position: relative;
-
         .char-counter {
-            position: absolute;
-            bottom: 2.25rem;
-            right: 2rem;
+            align-self: flex-end;
+            margin-top: -0.65rem;
             font-size: 0.75rem;
             color: $text-muted;
         }
@@ -379,6 +393,24 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
     margin-bottom: 0.25rem;
 }
 
+.field-error {
+    margin: 0;
+    color: #ff8585;
+    font-size: 0.8rem;
+    line-height: 1.45;
+}
+
+.generation-error {
+    margin: 1rem 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(#ff6b6b, 0.4);
+    border-radius: 0.5rem;
+    background-color: rgba(#ff6b6b, 0.1);
+    color: #ffb3b3;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
 // ── Dropzone ──────────────────────────────────────────────────────────────────
 .upload-section {
     display: flex;
@@ -387,6 +419,7 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 }
 
 .dropzone {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -402,6 +435,23 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
     &:hover {
         border-color: $accent;
         background-color: rgba($accent, 0.05);
+    }
+
+    &:focus-within {
+        border-color: $accent;
+        box-shadow: 0 0 0 2px rgba($accent, 0.2);
+    }
+
+    input[type='file'] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     &--dragging {
@@ -468,6 +518,12 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 
     &__file-meta {
         margin: 0;
+        font-size: 0.75rem;
+        color: $text-muted;
+    }
+
+    &__replace {
+        margin: 0.2rem 0 0;
         font-size: 0.75rem;
         color: $text-muted;
     }

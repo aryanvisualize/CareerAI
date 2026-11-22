@@ -12,7 +12,13 @@ const Home = () => {
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ resumeFile, setResumeFile ] = useState(null)
+    const [ resumeError, setResumeError ] = useState("")
+    const [ fieldErrors, setFieldErrors ] = useState({ jobDescription: "", profile: "" })
+    const [ generationError, setGenerationError ] = useState("")
+    const [ isGenerating, setIsGenerating ] = useState(false)
     const [ isDragging, setIsDragging ] = useState(false)
+    const jobDescriptionRef = useRef()
+    const selfDescriptionRef = useRef()
     const resumeInputRef = useRef()
     const dragCounterRef = useRef(0)
 
@@ -31,22 +37,72 @@ const Home = () => {
         return 'File'
     }
 
-    const isValidResumeFile = (file) => {
+    const handleJobDescriptionChange = (e) => {
+        const value = e.target.value
+        setJobDescription(value)
+        const styles = window.getComputedStyle(e.target)
+        const minHeight = Number.parseFloat(styles.minHeight) || 220
+        const maxHeight = Number.parseFloat(styles.maxHeight) || 420
+        e.target.style.height = 'auto'
+        e.target.style.height = `${Math.min(Math.max(e.target.scrollHeight, minHeight), maxHeight)}px`
+        setFieldErrors(errors => ({
+            ...errors,
+            jobDescription: value.trim() ? '' : errors.jobDescription,
+        }))
+        setGenerationError('')
+    }
+
+    const handleSelfDescriptionChange = (e) => {
+        const value = e.target.value
+        setSelfDescription(value)
+        setFieldErrors(errors => ({
+            ...errors,
+            profile: resumeFile || value.trim() ? '' : errors.profile,
+        }))
+        setGenerationError('')
+    }
+
+    const getResumeFileError = (file) => {
         const maxSize = 5 * 1024 * 1024
         const lowerName = file.name.toLowerCase()
         const validByName = lowerName.endsWith('.pdf')
         const validMimeTypes = ['application/pdf']
         const validByType = !file.type || validMimeTypes.includes(file.type)
 
-        return validByName && validByType && file.size <= maxSize
+        if (!validByName || !validByType) {
+            return 'Choose a PDF file to continue.'
+        }
+
+        if (file.size > maxSize) {
+            return 'Your PDF must be 5 MB or smaller.'
+        }
+
+        return ''
     }
 
     const handleResumeFile = (file) => {
-        if (!file || !isValidResumeFile(file)) {
+        if (!file) {
+            return
+        }
+
+        setGenerationError('')
+        const fileError = getResumeFileError(file)
+        if (fileError) {
+            setResumeError(resumeFile
+                ? `${fileError} Your current resume is still selected.`
+                : fileError)
+            if (resumeInputRef.current) {
+                resumeInputRef.current.value = ''
+            }
             return
         }
 
         setResumeFile(file)
+        setResumeError('')
+        setFieldErrors(errors => ({
+            ...errors,
+            profile: '',
+        }))
 
         if (resumeInputRef.current) {
             const dataTransfer = new DataTransfer()
@@ -98,14 +154,35 @@ const Home = () => {
     }
 
     const handleGenerateReport = async () => {
-        const selectedResumeFile = resumeFile || resumeInputRef.current.files[0]
-        const data = await generateReport({ jobDescription, selfDescription, resumeFile: selectedResumeFile })
-        if (!data?._id) {
-            // generateReport already logs the error; show a brief alert and stop
-            window.alert("Failed to generate your interview plan. Please check your inputs and try again.")
+        const nextErrors = {
+            jobDescription: jobDescription.trim() ? '' : 'Add the job description to continue.',
+            profile: resumeFile || selfDescription.trim()
+                ? ''
+                : 'Upload a resume or add a brief self-description.',
+        }
+        setFieldErrors(nextErrors)
+        setGenerationError('')
+
+        if (nextErrors.jobDescription || nextErrors.profile) {
+            if (nextErrors.jobDescription) {
+                jobDescriptionRef.current?.focus()
+            } else if (nextErrors.profile) {
+                selfDescriptionRef.current?.focus()
+            }
             return
         }
-        navigate(`/interview/${data._id}`)
+
+        setIsGenerating(true)
+        try {
+            const data = await generateReport({ jobDescription, selfDescription, resumeFile })
+            if (!data?._id) {
+                setGenerationError("We couldn't generate your interview plan. Please try again.")
+                return
+            }
+            navigate(`/interview/${data._id}`)
+        } finally {
+            setIsGenerating(false)
+        }
     }
 
     const onLogout = async () => {
@@ -115,7 +192,7 @@ const Home = () => {
         }
     }
 
-    if (loading) {
+    if (loading && !isGenerating) {
         return (
             <main className='loading-screen'>
                 <LoadingSpinner label='Loading your interview plan...' />
@@ -154,12 +231,21 @@ const Home = () => {
                             <span className='badge badge--required'>Required</span>
                         </div>
                         <textarea
-                            onChange={(e) => { setJobDescription(e.target.value) }}
-                            className='panel__textarea'
+                            ref={jobDescriptionRef}
+                            onChange={handleJobDescriptionChange}
+                            id='jobDescription'
+                            name='jobDescription'
+                            className={`panel__textarea ${fieldErrors.jobDescription ? 'panel__textarea--error' : ''}`}
+                            aria-label='Target job description'
+                            aria-invalid={Boolean(fieldErrors.jobDescription)}
+                            aria-describedby={`${fieldErrors.jobDescription ? 'jobDescription-error ' : ''}jobDescription-counter`}
                             placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
                             maxLength={5000}
                         />
-                        <div className='char-counter'>{jobDescription.length} / 5000 chars</div>
+                        {fieldErrors.jobDescription && (
+                            <p id='jobDescription-error' className='field-error' role='alert'>{fieldErrors.jobDescription}</p>
+                        )}
+                        <div id='jobDescription-counter' className='char-counter'>{jobDescription.length} / 5000 chars</div>
                     </div>
                     {/* Vertical Divider */}
                     <div className='panel-divider' />
@@ -175,10 +261,10 @@ const Home = () => {
 
                         {/* Upload Resume */}
                         <div className='upload-section'>
-                            <label className='section-label'>
+                            <div className='section-label'>
                                 Upload Resume
                                 <span className='badge badge--best'>Best Results</span>
-                            </label>
+                            </div>
                             <label
                                 className={`dropzone ${isDragging ? 'dropzone--dragging' : ''} ${resumeFile ? 'dropzone--uploaded' : ''}`}
                                 htmlFor='resume'
@@ -201,10 +287,21 @@ const Home = () => {
                                         <p className='dropzone__uploaded-title'>Resume uploaded</p>
                                         <p className='dropzone__file-name'>{resumeFile.name}</p>
                                         <p className='dropzone__file-meta'>{getFileTypeLabel(resumeFile)} • {formatFileSize(resumeFile.size)}</p>
+                                        <p className='dropzone__replace'>Click to replace</p>
                                     </div>
                                 )}
-                                <input ref={resumeInputRef} onChange={handleFileChange} hidden type='file' id='resume' name='resume' accept='.pdf,application/pdf' />
+                                <input
+                                    ref={resumeInputRef}
+                                    onChange={handleFileChange}
+                                    type='file'
+                                    id='resume'
+                                    name='resume'
+                                    accept='.pdf,application/pdf'
+                                    aria-invalid={Boolean(resumeError || fieldErrors.profile)}
+                                    aria-describedby={`${resumeError ? 'resume-error ' : ''}${fieldErrors.profile ? 'profile-error' : ''}`.trim() || undefined}
+                                />
                             </label>
+                            {resumeError && <p id='resume-error' className='field-error' role='alert'>{resumeError}</p>}
                         </div>
 
                         {/* OR Divider */}
@@ -214,10 +311,13 @@ const Home = () => {
                         <div className='self-description'>
                             <label className='section-label' htmlFor='selfDescription'>Quick Self-Description</label>
                             <textarea
-                                onChange={(e) => { setSelfDescription(e.target.value) }}
+                                ref={selfDescriptionRef}
+                                onChange={handleSelfDescriptionChange}
                                 id='selfDescription'
                                 name='selfDescription'
-                                className='panel__textarea panel__textarea--short'
+                                className={`panel__textarea panel__textarea--short ${fieldErrors.profile ? 'panel__textarea--error' : ''}`}
+                                aria-invalid={Boolean(fieldErrors.profile)}
+                                aria-describedby={fieldErrors.profile ? 'profile-error' : undefined}
                                 placeholder="Briefly describe your experience, key skills, and years of experience if you don't have a resume handy..."
                             />
                         </div>
@@ -227,15 +327,25 @@ const Home = () => {
                             <span className='info-box__icon'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" stroke="#1a1f27" strokeWidth="2" /><line x1="12" y1="16" x2="12.01" y2="16" stroke="#1a1f27" strokeWidth="2" /></svg>
                             </span>
-                            <p>Either a <strong>Resume</strong> or a <strong>Self Description</strong> is required to generate a personalized plan.</p>
+                            <p><strong>Required:</strong> Upload a resume or add a self-description to generate your personalized plan.</p>
                         </div>
+                        {fieldErrors.profile && (
+                            <p id='profile-error' className='field-error' role='alert'>{fieldErrors.profile}</p>
+                        )}
                     </div>
                 </div>
+
+                {generationError && (
+                    <div className='generation-error' role='alert'>
+                        {generationError}
+                    </div>
+                )}
 
                 {/* Card Footer */}
                 <div className='interview-card__footer'>
                     <span className='footer-info'>AI-Powered Strategy Generation &bull; Approx 30s</span>
                     <button
+                        type='button'
                         onClick={handleGenerateReport}
                         disabled={loading}
                         className='generate-btn'>
