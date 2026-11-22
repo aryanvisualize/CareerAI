@@ -34,11 +34,20 @@ export const useInterview = () => {
     throw new Error("useInterview must be used within an InterviewProvider");
   }
 
-  const { loading, setLoading, report, setReport, reports, setReports } =
-    context;
+  const {
+    loading,
+    setLoading,
+    report,
+    setReport,
+    reportError,
+    setReportError,
+    reports,
+    setReports,
+  } = context;
 
   const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
     setLoading(true)
+    setReportError(null)
 
     try {
         const response = await generateInterviewReport({
@@ -59,6 +68,8 @@ export const useInterview = () => {
 
   const getReportById = async (interviewId) => {
     setLoading(true);
+    setReport(null);
+    setReportError(null);
 
     try {
       const response = await getInterviewReportById(interviewId);
@@ -67,6 +78,10 @@ export const useInterview = () => {
     } catch (error) {
       console.error("Failed to get interview report:", error);
       setReport(null);
+      setReportError(
+        error.response?.data?.message ||
+          "We couldn't load this interview plan. Check your connection and try again.",
+      );
       return null;
     } finally {
       setLoading(false);
@@ -131,6 +146,7 @@ export const useInterview = () => {
   return {
     loading,
     report,
+    reportError,
     reports,
     generateReport,
     getReportById,

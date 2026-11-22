@@ -6,6 +6,7 @@ export const InterviewContext = createContext();
 export const InterviewProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [report, setReport] = useState(null);
+    const [reportError, setReportError] = useState(null);
     const [reports, setReports] = useState([]);
 
     return (
@@ -15,6 +16,8 @@ export const InterviewProvider = ({ children }) => {
                 setLoading,
                 report,
                 setReport,
+                reportError,
+                setReportError,
                 reports,
                 setReports,
             }}

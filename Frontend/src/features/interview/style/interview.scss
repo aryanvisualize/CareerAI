@@ -32,6 +32,50 @@ $severity-low: #3fb950;
     box-sizing: border-box;
 }
 
+.interview-error-screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background-color: $bg-page;
+    color: $text-primary;
+    font-family: $font-stack;
+}
+
+.interview-error {
+    width: min(100%, 32rem);
+    padding: 2rem;
+    background-color: $bg-card;
+    border: 1px solid $border-color;
+    border-radius: 1rem;
+    text-align: center;
+
+    h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.4rem;
+    }
+
+    p {
+        margin: 0;
+        color: $text-muted;
+        line-height: 1.5;
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    &__back {
+        background-color: $bg-panel;
+        color: $text-primary;
+    }
+}
+
 // ── 3-Column Layout ───────────────────────────────────────────────────────────
 .interview-layout {
     display: flex;
@@ -448,6 +492,14 @@ $severity-low: #3fb950;
         font-size: 0.75rem;
         color: $severity-low;
         text-align: center;
+
+        &.score--mid {
+            color: $severity-medium;
+        }
+
+        &.score--low {
+            color: $severity-high;
+        }
     }
 }
 

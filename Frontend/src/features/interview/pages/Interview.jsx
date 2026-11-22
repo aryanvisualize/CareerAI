@@ -61,15 +61,42 @@ const RoadMapDay = ({ day }) => (
 // ── Main Component ────────────────────────────────────────────────────────────
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
-    const { report, loading, getResumePdf } = useInterview()
+    const { report, reportError, loading, getReportById, getResumePdf } = useInterview()
     const { handleLogout } = useAuth()
     const { interviewId } = useParams()
     const navigate = useNavigate()
 
-    if (loading || !report) {
+    if (loading && !report) {
         return (
             <main className='loading-screen'>
-                <LoadingSpinner label='Crafting your tailored resume……' />
+                <LoadingSpinner label='Loading your interview plan...' />
+            </main>
+        )
+    }
+
+    if (!report) {
+        return (
+            <main className='interview-error-screen'>
+                <section className='interview-error' role='alert'>
+                    <h1>Interview plan unavailable</h1>
+                    <p>{reportError || "We couldn't load this interview plan. Please try again."}</p>
+                    <div className='interview-error__actions'>
+                        <button
+                            type='button'
+                            className='button primary-button'
+                            onClick={() => getReportById(interviewId)}
+                            disabled={loading}>
+                            {loading ? 'Retrying...' : 'Try again'}
+                        </button>
+                        <button
+                            type='button'
+                            className='button interview-error__back'
+                            onClick={() => navigate('/')}
+                            disabled={loading}>
+                            Back to dashboard
+                        </button>
+                    </div>
+                </section>
             </main>
         )
     }
@@ -77,6 +104,11 @@ const Interview = () => {
     const scoreColor =
         report.matchScore >= 80 ? 'score--high' :
             report.matchScore >= 60 ? 'score--mid' : 'score--low'
+
+    const scoreCaption =
+        report.matchScore >= 80 ? 'Strong match for this role' :
+            report.matchScore >= 60 ? 'Moderate match; review your skill gaps' :
+                'Low match; focus on building key skills'
 
     const onLogout = async () => {
         const success = await handleLogout()
@@ -174,7 +206,7 @@ const Interview = () => {
                                 <span className='match-score__value'>{report.matchScore}</span>
                                 <span className='match-score__pct'>%</span>
                             </div>
-                            <p className='match-score__sub'>Strong match for this role</p>
+                            <p className={`match-score__sub ${scoreColor}`}>{scoreCaption}</p>
                         </div>
 
                         <div className='sidebar-divider' />
