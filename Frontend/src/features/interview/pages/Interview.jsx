@@ -3,8 +3,8 @@ import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
 import { useParams, useNavigate } from 'react-router'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
-import { useAuth } from '../../auth/hooks/useAuth.js'
-import ThemeToggle from '../../../ThemeToggle.jsx'
+import AppNavigation from '../components/AppNavigation.jsx'
+import '../style/home.scss'
 
 
 
@@ -63,7 +63,6 @@ const RoadMapDay = ({ day }) => (
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
     const { report, reportError, loading, getReportById, getResumePdf } = useInterview()
-    const { handleLogout } = useAuth()
     const { interviewId } = useParams()
     const navigate = useNavigate()
 
@@ -92,7 +91,7 @@ const Interview = () => {
                         <button
                             type='button'
                             className='button interview-error__back'
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/plans')}
                             disabled={loading}>
                             Back to dashboard
                         </button>
@@ -111,29 +110,21 @@ const Interview = () => {
             report.matchScore >= 60 ? 'Moderate match; review your skill gaps' :
                 'Low match; focus on building key skills'
 
-    const onLogout = async () => {
-        const success = await handleLogout()
-        if (success) {
-            navigate('/login')
-        }
-    }
-
-
     return (
         <div className='interview-page'>
             <div className='interview-frame'>
+                <AppNavigation />
                 <header className='interview-header'>
                     <div className='interview-header__title'>
                         <p>Interview plan</p>
                         <h1>{report.title || 'Interview Plan'}</h1>
                     </div>
                     <div className='interview-header__actions'>
-                        <ThemeToggle />
                         <button
                             type='button'
                             className='interview-close'
                             aria-label='Close this plan and return to your plans list'
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/plans')}
                         >
                             <svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
                                 <line x1='18' y1='6' x2='6' y2='18' />
@@ -255,15 +246,6 @@ const Interview = () => {
                                 ))}
                             </div>
                         </div>
-                    </div>
-
-                    <div className='logout-container'>
-                        <button
-                            type='button'
-                            onClick={onLogout}
-                            className='button interview-sidebar__logout'>
-                            Logout
-                        </button>
                     </div>
 
                 </aside>

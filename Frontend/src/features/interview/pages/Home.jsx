@@ -3,13 +3,11 @@ import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
-import { useAuth } from '../../auth/hooks/useAuth.js'
-import ThemeToggle from '../../../ThemeToggle.jsx'
+import AppNavigation from '../components/AppNavigation.jsx'
 
 const Home = () => {
 
-    const { loading, generateReport, reports, setReportPinned, removeReport } = useInterview()
-    const { handleLogout } = useAuth()
+    const { loading, generateReport } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ resumeFile, setResumeFile ] = useState(null)
@@ -18,48 +16,12 @@ const Home = () => {
     const [ generationError, setGenerationError ] = useState("")
     const [ isGenerating, setIsGenerating ] = useState(false)
     const [ isDragging, setIsDragging ] = useState(false)
-    const [ showAllReports, setShowAllReports ] = useState(false)
-    const [ reportSearch, setReportSearch ] = useState('')
-    const [ openReportMenuId, setOpenReportMenuId ] = useState(null)
-    const [ reportActionError, setReportActionError ] = useState('')
     const jobDescriptionRef = useRef()
     const selfDescriptionRef = useRef()
     const resumeInputRef = useRef()
     const dragCounterRef = useRef(0)
 
     const navigate = useNavigate()
-    const sortedReports = [...(reports || [])].sort((first, second) =>
-        Number(Boolean(second.isPinned)) - Number(Boolean(first.isPinned)) ||
-        (Date.parse(second.createdAt) || 0) - (Date.parse(first.createdAt) || 0)
-    )
-    const reportQuery = reportSearch.trim().toLowerCase()
-    const visibleReports = showAllReports
-        ? sortedReports.filter(report => (report.title || 'Untitled Position').toLowerCase().includes(reportQuery))
-        : sortedReports.slice(0, 6)
-
-    const handleReportPin = async (report) => {
-        setReportActionError('')
-        try {
-            await setReportPinned(report._id, !report.isPinned)
-            setOpenReportMenuId(null)
-        } catch (error) {
-            setReportActionError(error.message)
-        }
-    }
-
-    const handleReportDelete = async (report) => {
-        const title = report.title || 'Untitled plan'
-        if (!window.confirm(`Delete “${title}”? This permanently removes the plan.`)) return
-
-        setReportActionError('')
-        try {
-            await removeReport(report._id)
-            setOpenReportMenuId(null)
-        } catch (error) {
-            setReportActionError(error.message)
-        }
-    }
-
     const formatFileSize = (sizeInBytes) => {
         if (!sizeInBytes && sizeInBytes !== 0) return ''
         if (sizeInBytes < 1024) return `${sizeInBytes} B`
@@ -221,13 +183,6 @@ const Home = () => {
         }
     }
 
-    const onLogout = async () => {
-        const success = await handleLogout()
-        if (success) {
-            navigate('/login')
-        }
-    }
-
     if (loading && !isGenerating) {
         return (
             <main className='loading-screen'>
@@ -238,18 +193,7 @@ const Home = () => {
     return (
         <div className='home-page'>
 
-            <header className='app-header'>
-                <span className='app-header__brand'>CareerAI</span>
-                <div className='app-header__actions'>
-                    <ThemeToggle />
-                    <button
-                        type='button'
-                        onClick={onLogout}
-                        className='generate-btn generate-btn--ghost'>
-                        Logout
-                    </button>
-                </div>
-            </header>
+            <AppNavigation />
 
             {/* Page Header */}
             <header className='page-header'>
@@ -393,109 +337,6 @@ const Home = () => {
                     </button>
                 </div>
             </div>
-
-            {/* Recent Reports List */}
-            {reports.length > 0 && (
-                <section className='recent-reports'>
-                    <div className='recent-reports__header'>
-                        <h2>{showAllReports ? 'All Interview Plans' : 'Recent Interview Plans'}</h2>
-                        {reports.length > 6 && (
-                            <button
-                                type='button'
-                                className='reports-toggle'
-                                onClick={() => {
-                                    setShowAllReports(showingAll => !showingAll)
-                                    setReportSearch('')
-                                }}>
-                                {showAllReports ? 'Show recent' : `View all ${reports.length}`}
-                            </button>
-                        )}
-                    </div>
-                    <div className='reports-toolbar'>
-                        <p className='reports-count'>
-                            {showAllReports
-                                ? `${visibleReports.length} of ${reports.length} plans`
-                                : `Showing latest ${visibleReports.length} ${visibleReports.length === 1 ? 'plan' : 'plans'}`}
-                        </p>
-                        {showAllReports && (
-                            <label className='report-search' htmlFor='reportSearch'>
-                                <span>Search plans</span>
-                                <input
-                                    id='reportSearch'
-                                    type='search'
-                                    value={reportSearch}
-                                    onChange={(e) => setReportSearch(e.target.value)}
-                                    placeholder='Search by job title'
-                                />
-                            </label>
-                        )}
-                    </div>
-                    {visibleReports.length > 0 ? (
-                        <ul className='reports-list'>
-                            {visibleReports.map(report => {
-                                const title = report.title || 'Untitled Position'
-                                const scoreClass = report.matchScore >= 80
-                                    ? 'score--high'
-                                    : report.matchScore >= 60 ? 'score--mid' : 'score--low'
-
-                                return (
-                                    <li key={report._id} className={`report-item${report.isPinned ? ' is-pinned' : ''}`}>
-                                        <button
-                                            type='button'
-                                            className='report-menu-trigger'
-                                            aria-label={`Actions for ${title}`}
-                                            aria-haspopup='menu'
-                                            aria-expanded={openReportMenuId === report._id}
-                                            onClick={() => {
-                                                setReportActionError('')
-                                                setOpenReportMenuId(id => id === report._id ? null : report._id)
-                                            }}>
-                                            <span aria-hidden='true'>⋮</span>
-                                        </button>
-                                        <button
-                                            type='button'
-                                            className='report-card'
-                                            onClick={() => navigate(`/interview/${report._id}`)}>
-                                            <h3 title={title}>{title}</h3>
-                                            {report.isPinned && <span className='report-pinned-label'>Pinned</span>}
-                                            <div className='report-card__meta'>
-                                                <time dateTime={report.createdAt}>
-                                                    {new Date(report.createdAt).toLocaleDateString(undefined, {
-                                                        month: 'short',
-                                                        day: 'numeric',
-                                                        year: 'numeric',
-                                                    })}
-                                                </time>
-                                                <span className={`report-score ${scoreClass}`}>{report.matchScore}% match</span>
-                                            </div>
-                                            <span className='report-card__action'>Open plan <span aria-hidden='true'>→</span></span>
-                                        </button>
-                                        {openReportMenuId === report._id && (
-                                            <div
-                                                className='report-menu'
-                                                role='menu'
-                                                aria-label={`Actions for ${title}`}
-                                                onKeyDown={event => {
-                                                    if (event.key === 'Escape') setOpenReportMenuId(null)
-                                                }}>
-                                                <button type='button' role='menuitem' onClick={() => handleReportPin(report)}>
-                                                    {report.isPinned ? 'Unpin plan' : 'Pin plan'}
-                                                </button>
-                                                <button type='button' role='menuitem' className='report-menu__delete' onClick={() => handleReportDelete(report)}>
-                                                    Delete plan
-                                                </button>
-                                                {reportActionError && <p className='report-menu__error' role='alert'>{reportActionError}</p>}
-                                            </div>
-                                        )}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    ) : (
-                        <p className='reports-empty'>No plans match “{reportSearch}”. Try another title.</p>
-                    )}
-                </section>
-            )}
 
             {/* Page Footer */}
             <footer className='page-footer'>
