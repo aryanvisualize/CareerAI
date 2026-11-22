@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router'
-import "../auth.form.scss"
 import { useAuth } from '../hooks/useAuth.js'
+import AuthLayout from '../components/AuthLayout.jsx'
 
 const Login = () => {
 
@@ -23,34 +23,44 @@ const Login = () => {
     };
 
     if (loading) {
-        return (<main><h1>Loading.......</h1></main>)
+        return (
+            <AuthLayout>
+                <div className='auth-loading' role='status'>
+                    <span className='auth-loading__ring' aria-hidden='true' />
+                    <span>Please wait...</span>
+                </div>
+            </AuthLayout>
+        )
     }
 
-
     return (
-        <main>
-            <div className="form-container">
-                <h1>Login</h1>
-                <form onSubmit={(e) => {
-                    handleSubmit(e)
-                }}>
+        <AuthLayout>
+            <div className='form-container'>
+                <header className='auth-intro'>
+                    <p className='auth-eyebrow'>Welcome back</p>
+                    <h1>Sign in</h1>
+                    <p>Pick up where you left off and keep preparing for your next opportunity.</p>
+                </header>
+                <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label htmlFor="email">Email</label>
                         <input
                             onChange={(e) => { setEmail(e.target.value) }}
-                            type="email" id="email" name='email' placeholder='Enter email address' />
+                            type="email" id="email" name='email' placeholder='you@example.com'
+                            autoComplete='email' required />
                     </div>
                     <div className="input-group">
                         <label htmlFor="password">Password</label>
                         <input
                             onChange={(e) => { setPassword(e.target.value) }}
-                            type="password" id="password" name='password' placeholder='Enter password' />
+                            type="password" id="password" name='password' placeholder='Enter your password'
+                            autoComplete='current-password' required />
                     </div>
-                    <button className='button primary-button' >Login</button>
+                    <button type='submit' className='button primary-button'>Sign in</button>
                 </form>
-                <p>Don't have an account? <Link to={"/register"} >Register</Link> </p>
+                <p className='auth-switch'>New to CareerAI? <Link to='/register'>Create an account</Link></p>
             </div>
-        </main>
+        </AuthLayout>
     )
 }
 
