@@ -1,4 +1,5 @@
 import '../auth.form.scss'
+import ThemeToggle from '../../../ThemeToggle.jsx'
 
 const AuthLayout = ({ children }) => (
     <main className='auth-page'>
@@ -32,6 +33,9 @@ const AuthLayout = ({ children }) => (
             </aside>
 
             <section className='auth-content' aria-label='Account access'>
+                <div className='auth-content__tools'>
+                    <ThemeToggle />
+                </div>
                 {children}
             </section>
         </div>

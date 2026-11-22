@@ -136,6 +136,53 @@ async function getAllInterviewReportsController(req, res) {
     }
 }
 
+/** Update the pinned state for a report owned by the authenticated user. */
+async function updateInterviewReportPinController(req, res) {
+    try {
+        const { interviewId } = req.params
+        const { isPinned } = req.body
+
+        if (typeof isPinned !== "boolean") {
+            return res.status(400).json({ message: "A valid pinned state is required." })
+        }
+
+        const interviewReport = await interviewReportModel.findOneAndUpdate(
+            { _id: interviewId, user: req.user.id },
+            { $set: { isPinned } },
+            { new: true, runValidators: true }
+        ).select("_id isPinned")
+
+        if (!interviewReport) {
+            return res.status(404).json({ message: "Interview report not found." })
+        }
+
+        return res.status(200).json({ message: "Interview plan updated.", interviewReport })
+    } catch (error) {
+        console.error("updateInterviewReportPinController error:", error.message)
+        return res.status(500).json({ message: "Failed to update interview plan." })
+    }
+}
+
+/** Permanently delete a report owned by the authenticated user. */
+async function deleteInterviewReportController(req, res) {
+    try {
+        const { interviewId } = req.params
+        const interviewReport = await interviewReportModel.findOneAndDelete({
+            _id: interviewId,
+            user: req.user.id,
+        })
+
+        if (!interviewReport) {
+            return res.status(404).json({ message: "Interview report not found." })
+        }
+
+        return res.status(200).json({ message: "Interview plan deleted successfully." })
+    } catch (error) {
+        console.error("deleteInterviewReportController error:", error.message)
+        return res.status(500).json({ message: "Failed to delete interview plan." })
+    }
+}
+
 
 /**
  * @description Controller to generate resume PDF based on user self description, resume and job description.
@@ -211,6 +258,8 @@ module.exports = {
     generateInterViewReportController,
     getInterviewReportByIdController,
     getAllInterviewReportsController,
+    updateInterviewReportPinController,
+    deleteInterviewReportController,
     generateResumePdfController
 }
 

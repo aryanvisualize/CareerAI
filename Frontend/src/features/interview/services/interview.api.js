@@ -57,6 +57,16 @@ export const getAllInterviewReports = async () => {
     return response.data;
 };
 
+export const setInterviewReportPinned = async (interviewId, isPinned) => {
+    const response = await api.patch(`/api/interview/report/${interviewId}/pin`, { isPinned });
+    return response.data;
+};
+
+export const deleteInterviewReport = async (interviewId) => {
+    const response = await api.delete(`/api/interview/report/${interviewId}`);
+    return response.data;
+};
+
 /**
  * @description Service to generate resume PDF.
  */

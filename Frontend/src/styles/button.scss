@@ -9,7 +9,7 @@
     transition: all 0.3s ease-in-out;
 
     &.primary-button{
-        background-color: #e1034d;
+        background-color: var(--accent-strong);
         color: white;
     }
 

@@ -4,6 +4,7 @@ import { useInterview } from '../hooks/useInterview.js'
 import { useParams, useNavigate } from 'react-router'
 import LoadingSpinner from '../components/LoadingSpinner.jsx'
 import { useAuth } from '../../auth/hooks/useAuth.js'
+import ThemeToggle from '../../../ThemeToggle.jsx'
 
 
 
@@ -120,15 +121,43 @@ const Interview = () => {
 
     return (
         <div className='interview-page'>
+            <div className='interview-frame'>
+                <header className='interview-header'>
+                    <div className='interview-header__title'>
+                        <p>Interview plan</p>
+                        <h1>{report.title || 'Interview Plan'}</h1>
+                    </div>
+                    <div className='interview-header__actions'>
+                        <ThemeToggle />
+                        <button
+                            type='button'
+                            className='interview-close'
+                            aria-label='Close this plan and return to your plans list'
+                            onClick={() => navigate('/')}
+                        >
+                            <svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
+                                <line x1='18' y1='6' x2='6' y2='18' />
+                                <line x1='6' y1='6' x2='18' y2='18' />
+                            </svg>
+                            <span>Close plan</span>
+                        </button>
+                    </div>
+                </header>
+
             <div className='interview-layout'>
 
                 {/* ── Left Nav ── */}
-                <nav className='interview-nav'>
-                    <div className="nav-content">
-                        <p className='interview-nav__label'>Sections</p>
+                <nav className='interview-nav' aria-label='Interview plan sections'>
+                    <div className="nav-content" role='tablist' aria-label='Plan sections'>
+                        <span className='interview-nav__label' role='presentation'>Sections</span>
                         {NAV_ITEMS.map(item => (
                             <button
                                 key={item.id}
+                                type='button'
+                                id={`plan-tab-${item.id}`}
+                                role='tab'
+                                aria-selected={activeNav === item.id}
+                                aria-controls='plan-content'
                                 className={`interview-nav__item ${activeNav === item.id ? 'interview-nav__item--active' : ''}`}
                                 onClick={() => setActiveNav(item.id)}
                             >
@@ -148,7 +177,11 @@ const Interview = () => {
                 <div className='interview-divider' />
 
                 {/* ── Center Content ── */}
-                <main className='interview-content'>
+                <main
+                    className='interview-content'
+                    id='plan-content'
+                    role='tabpanel'
+                    aria-labelledby={`plan-tab-${activeNav}`}>
                     {activeNav === 'technical' && (
                         <section>
                             <div className='content-header'>
@@ -234,6 +267,7 @@ const Interview = () => {
                     </div>
 
                 </aside>
+            </div>
             </div>
         </div>
     )

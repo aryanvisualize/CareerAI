@@ -3,6 +3,8 @@ import {
   generateInterviewReport,
   getInterviewReportById,
   generateResumePdf,
+  setInterviewReportPinned,
+  deleteInterviewReport,
 } from "../services/interview.api";
 import { useContext, useEffect } from "react";
 import { InterviewContext } from "../interview.context";
@@ -135,6 +137,28 @@ export const useInterview = () => {
     }
   };
 
+  const setReportPinned = async (interviewReportId, isPinned) => {
+    try {
+      const response = await setInterviewReportPinned(interviewReportId, isPinned);
+      setReports(current => current.map(item => item._id === interviewReportId
+        ? { ...item, isPinned: response.interviewReport.isPinned }
+        : item));
+      return true;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Couldn't update the plan. Please try again.");
+    }
+  };
+
+  const removeReport = async (interviewReportId) => {
+    try {
+      await deleteInterviewReport(interviewReportId);
+      setReports(current => current.filter(item => item._id !== interviewReportId));
+      return true;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Couldn't delete the plan. Please try again.");
+    }
+  };
+
   useEffect(() => {
     if (interviewId) {
       getReportById(interviewId);
@@ -152,5 +176,7 @@ export const useInterview = () => {
     getReportById,
     getReports,
     getResumePdf,
+    setReportPinned,
+    removeReport,
   };
 };

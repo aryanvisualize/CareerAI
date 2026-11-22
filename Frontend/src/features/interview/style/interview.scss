@@ -1,12 +1,11 @@
-@use "sass:color";
 // ── Shared Variables (mirrors home.scss theme) ────────────────────────────────
-$bg-page: #0d1117;
-$bg-card: #161b22;
-$bg-panel: #1c2230;
-$bg-input: #1e2535;
-$border-color: #2a3348;
-$text-primary: #e6edf3;
-$text-muted: #7d8590;
+$bg-page: var(--page-bg);
+$bg-card: var(--surface);
+$bg-panel: var(--surface-raised);
+$bg-input: var(--field-bg);
+$border-color: var(--border);
+$text-primary: var(--text);
+$text-muted: var(--text-muted);
 $accent: #ff2d78;
 $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
@@ -14,10 +13,6 @@ $font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, s
 $severity-high: #ff4d4d;
 $severity-medium: #f5a623;
 $severity-low: #3fb950;
-
-*::-webkit-scrollbar {
-    display: none;
-}
 
 // ── Page Shell ────────────────────────────────────────────────────────────────
 .interview-page {
@@ -30,6 +25,84 @@ $severity-low: #3fb950;
     align-items: stretch;
     padding: 1.5rem;
     box-sizing: border-box;
+}
+
+.interview-frame {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 1280px;
+    min-width: 0;
+    margin: 0 auto;
+}
+
+.interview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
+
+    &__title {
+        min-width: 0;
+
+        p {
+            margin: 0 0 0.2rem;
+            color: $text-muted;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: $text-primary;
+            font-size: clamp(1.15rem, 2vw, 1.55rem);
+            font-weight: 700;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+    }
+}
+
+.interview-close {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.6rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid $border-color;
+    border-radius: 0.55rem;
+    background-color: $bg-card;
+    color: $text-primary;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+
+    &:hover {
+        border-color: $accent;
+        background-color: rgba($accent, 0.08);
+        color: $accent;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $accent;
+        outline-offset: 2px;
+    }
+}
+
+.interview-header__actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.55rem;
 }
 
 .interview-error-screen {
@@ -80,8 +153,8 @@ $severity-low: #3fb950;
 .interview-layout {
     display: flex;
     width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
+    flex: 1;
+    min-height: 0;
     background-color: $bg-card;
     border: 1px solid $border-color;
     border-radius: 1rem;
@@ -159,6 +232,8 @@ $severity-low: #3fb950;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    scrollbar-color: $border-color $bg-card;
+    scrollbar-width: thin;
 }
 
 // ── Center Content ────────────────────────────────────────────────────────────
@@ -167,9 +242,11 @@ $severity-low: #3fb950;
     padding: 1.75rem 2rem;
     overflow-y: auto;
     min-height: initial;
-    max-height: calc(100vh - 3rem);
+    max-height: calc(100vh - 8rem);
     padding-bottom: 5rem;
     align-items: flex-start;
+    scrollbar-color: $border-color $bg-card;
+    scrollbar-width: thin;
 
 
 
@@ -223,7 +300,7 @@ $severity-low: #3fb950;
     transition: border-color 0.2s;
 
     &:hover {
-        border-color: color.adjust($border-color, $lightness: 8%);
+        border-color: var(--border-strong);
     }
 
     &__header {
@@ -286,7 +363,7 @@ $severity-low: #3fb950;
         p {
             margin: 0;
             font-size: 0.835rem;
-            border-color: color.adjust($border-color, $lightness: 8%);
+            border-color: var(--border-strong);
             line-height: 1.6;
             overflow-wrap: anywhere;
         }
@@ -391,7 +468,7 @@ $severity-low: #3fb950;
             align-items: flex-start;
             gap: 0.5rem;
             font-size: 0.845rem;
-            color: color.adjust($text-muted, $lightness: 12%);
+            color: var(--text-secondary);
             line-height: 1.5;
         }
     }
@@ -616,11 +693,26 @@ $severity-low: #3fb950;
     }
 
     .nav-content {
+        flex-direction: row;
+        align-items: center;
         gap: 0.5rem;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.35rem;
+    }
+
+    .interview-nav__label {
+        display: none;
+    }
+
+    .interview-nav__item {
+        flex: 0 0 auto;
+        width: auto;
+        white-space: nowrap;
     }
 
     .interview-content {
-        order: 3;
+        order: 2;
         padding: 1rem;
         max-height: none;
         overflow-y: visible;
@@ -632,7 +724,7 @@ $severity-low: #3fb950;
     }
 
     .interview-sidebar {
-        order: 2;
+        order: 3;
         padding: 1rem;
     }
 
@@ -648,6 +740,38 @@ $severity-low: #3fb950;
 
     .interview-layout {
         border-radius: 0.75rem;
+    }
+
+    .interview-frame {
+        gap: 0.5rem;
+    }
+
+    .interview-header {
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        &__title h1 {
+            font-size: 1.05rem;
+        }
+    }
+
+    .interview-close {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        padding: 0.5rem;
+
+        span {
+            display: none;
+        }
+    }
+
+    .interview-header__actions .theme-toggle {
+        min-width: 2.5rem;
+        padding: 0.5rem;
+
+        span {
+            display: none;
+        }
     }
 
     .interview-nav,

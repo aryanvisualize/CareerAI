@@ -21,6 +21,20 @@ interviewRouter.post("/", authMiddleware.authUser, upload.single("resume"), inte
  */
 interviewRouter.get("/report/:interviewId", authMiddleware.authUser, interviewController.getInterviewReportByIdController)
 
+/**
+ * @route PATCH /api/interview/report/:interviewId/pin
+ * @description Update the pinned state of an interview report.
+ * @access private
+ */
+interviewRouter.patch("/report/:interviewId/pin", authMiddleware.authUser, interviewController.updateInterviewReportPinController)
+
+/**
+ * @route DELETE /api/interview/report/:interviewId
+ * @description Delete an interview report owned by the logged in user.
+ * @access private
+ */
+interviewRouter.delete("/report/:interviewId", authMiddleware.authUser, interviewController.deleteInterviewReportController)
+
 
 /**
  * @route GET /api/interview/
