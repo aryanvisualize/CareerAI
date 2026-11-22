@@ -1,455 +1,231 @@
-<div align="center">
+# CareerAI
 
-# 🚀 CareerAI
+**Role-specific interview preparation and resume tailoring for placement candidates.** CareerAI compares a candidate profile with a target job description, then builds a practical preparation plan: a role match estimate, skill gaps, technical and behavioral practice questions, a seven-day roadmap, and an optional tailored resume PDF.
 
-### 🧬 Generative AI Project — AI-Powered Job Preparation & Resume Intelligence Platform
+<p align="center">
+  <img src="docs/careerai-preview.png" alt="CareerAI interview preparation dashboard" width="90%" />
+</p>
 
-[![Generative AI](https://img.shields.io/badge/Generative_AI-FF6F61?style=for-the-badge&logo=openai&logoColor=white)](https://ai.google.dev/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_AI-8E75B2?style=for-the-badge&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
-[![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![PDFKit](https://img.shields.io/badge/PDFKit-D6001C?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://pdfkit.org/)
+CareerAI is a candidate preparation product. Its match score is an AI-generated estimate for reflection and practice; it is not a recruiter decision, an ATS ranking, or a guarantee of selection.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/aryanvisualize/CareerAI/pulls)
-[![GitHub stars](https://img.shields.io/github/stars/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/aryanvisualize/CareerAI?style=flat-square)](https://github.com/aryanvisualize/CareerAI/commits/main)
+## What candidates can do
 
-[**Live Demo**](#) · [**Report Bug**](https://github.com/aryanvisualize/CareerAI/issues) · [**Request Feature**](https://github.com/aryanvisualize/CareerAI/issues)
+- Create an account and keep interview plans in a personal workspace.
+- Paste a job description and provide a profile using a PDF resume, a short self-description, or both. PDF uploads are limited to 5 MB.
+- Review an AI-generated role match estimate and skill gaps, including gap severity.
+- Practice role-specific technical and behavioral questions with interviewer intent and sample answers.
+- Follow a generated seven-day preparation roadmap.
+- Generate and download an ATS-friendly resume PDF tailored to the target role.
+- Search saved plans by job title, pin plans for later, and delete plans.
+- Switch the interface theme.
 
-</div>
+### Placement and recruiter perspective
 
-<br>
+For placement candidates, the workflow turns a job posting into concrete preparation tasks and helps make relevant experience easier to explain. Candidates should verify generated answers and resume content against their real experience before using them in an interview or application.
 
-<div align="center">
-<img src="./docs/careerai-preview.png" alt="CareerAI Preview" width="90%">
-</div>
+For recruiters and placement reviewers, CareerAI demonstrates a role-alignment workflow: job requirements are compared with candidate-provided evidence, gaps are surfaced, and interview preparation is organized into a readable report. The current product is candidate-facing; it does not provide recruiter accounts, candidate search, hiring decisions, or an employer dashboard. The match score is not an objective assessment of candidate quality.
 
-<br>
+The project also showcases practical full-stack skills relevant to entry-level roles: a feature-based React app, REST APIs, MongoDB persistence, cookie-based authentication, schema-validated Gemini output, PDF processing and generation, and a signed n8n webhook integration.
 
-## 📋 Table of Contents
-
-<details open>
-<summary>Click to expand/collapse</summary>
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Architecture](#️-architecture)
-- [Tech Stack](#️-tech-stack)
-- [Application Workflow](#-application-workflow)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [Environment Variables](#️-environment-variables)
-- [API Reference](#-api-reference)
-- [Security](#️-security-considerations)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
-
-</details>
-
----
-
-## 🌟 Overview
-
-**CareerAI is a Generative AI project** — a production-ready, Full Stack GenAI web application that helps job seekers prepare smarter. It uses **Google Gemini** as its generative intelligence layer to analyze resumes, identify skill gaps against target job descriptions, optimize resumes for ATS systems, and generate personalized AI-powered interview questions — all in one platform.
-
-Built with **React.js, Node.js, Express.js, JWT, Google Gemini AI, and PDFKit**, CareerAI simulates a real-world SaaS product combining secure authentication, document processing, generative AI integration, and dynamic PDF generation.
-
-> **One platform. One resume. One target job. Smarter preparation.**
-
----
-
-## ✨ Features
-
-<table>
-<tr>
-<td width="50%" valign="top">
-
-### 🔐 Secure Authentication
-- User registration and login
-- JWT-based authentication
-- Secure protected routes
-- JWT token blacklisting
-- Logout and session invalidation
-- Middleware-based authorization
-
-### 📄 Resume Processing
-- Upload resumes through the web app
-- Parse resume content
-- Extract skills, experience, education
-- Convert unstructured data into structured JSON
-
-### 🎯 Job Description Analysis
-- AI-driven job description parsing
-- Extract required skills and qualifications
-- Identify important keywords
-- Compare job requirements with candidate skills
-
-</td>
-<td width="50%" valign="top">
-
-### 🧠 AI-Powered Skill Gap Detection
-- Compare resume skills vs. job requirements
-- Identify missing or weak skills
-- Highlight areas needing improvement
-- Actionable preparation recommendations
-
-### 🤖 AI Interview Preparation
-- Personalized interview question generation
-- Based on resume, JD, skills & gaps
-- Technical + behavioral question support
-
-### 📈 ATS-Optimized Resume Generation
-- AI-generated, keyword-optimized content
-- Job-specific resume versions
-- Programmatic PDF generation via PDFKit
-
-</td>
-</tr>
-</table>
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart TD
-    A["🖥️ React Frontend"] -->|REST API| B["⚙️ Node.js + Express.js"]
-
-    B --> C["🔐 Auth<br/>JWT + Blacklist"]
-    B --> D["📄 Resume Processing"]
-    B --> E["🎯 Job Description Analysis"]
-
-    D --> F["🧠 Gemini AI Engine"]
-    E --> F
-
-    F --> G["📊 Skill Gap Analysis"]
-    F --> H["🤖 Interview Questions"]
-    F --> I["📈 ATS Resume Generation"]
-
-    I --> J["🖨️ PDFKit PDF Engine"]
-    J --> K["⬇️ Downloadable PDF Resume"]
-
-    style A fill:#61DAFB,color:#000
-    style B fill:#339933,color:#fff
-    style F fill:#8E75B2,color:#fff
-    style J fill:#40B5A4,color:#fff
-    style K fill:#f5a623,color:#000
-```
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technologies |
-|---|---|
-| **Frontend** | React.js, JavaScript, HTML5, CSS3, REST API integration |
-| **Backend** | Node.js, Express.js, RESTful APIs, Middleware architecture |
-| **Authentication** | JSON Web Token (JWT), Token blacklisting, Protected routes |
-| **Artificial Intelligence** | Google Gemini API — resume analysis, skill extraction, JD analysis, interview generation, ATS optimization |
-| **PDF Generation** | PDFKit — programmatic, code-driven PDF generation |
-
----
-
-## 🔄 Application Workflow
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant App as CareerAI App
-    participant AI as Gemini AI
-    participant PDF as PDFKit
-
-    User->>App: Create account & log in
-    User->>App: Upload resume
-    App->>AI: Extract skills, education, experience
-    User->>App: Paste job description
-    App->>AI: Analyze JD (skills, keywords, requirements)
-    AI-->>App: Matching & missing skills
-    App-->>User: Skill gap report + recommendations
-    AI-->>App: Personalized interview questions
-    App-->>User: Interview prep set
-    AI-->>App: ATS-optimized resume content
-    App->>PDF: Generate PDF document
-    PDF-->>User: Download tailored resume
-```
-
-<details>
-<summary><b>📊 Skill Gap Analysis — detail view</b></summary>
-
-```text
-   Candidate Skills          Job Requirements
-          │                         │
-          └───────────┬─────────────┘
-                       ▼
-                  AI Analysis
-                       ▼
-        ┌───────────────────────────┐
-        │      Matching Skills      │
-        │      Missing Skills       │
-        │      Recommendations      │
-        └───────────────────────────┘
-```
-
-</details>
-
----
-
-## 📂 Project Structure
-
-```text
-CareerAI/
-│
-├── client/                  # React frontend
-│   ├── public/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       ├── services/
-│       ├── hooks/
-│       ├── utils/
-│       └── App.jsx
-│
-├── server/                  # Node.js / Express backend
-│   ├── controllers/
-│   ├── middleware/
-│   ├── routes/
-│   ├── services/
-│   ├── utils/
-│   ├── models/
-│   └── server.js
-│
-├── uploads/                 # Uploaded resume storage
-│
-├── .env
-├── .gitignore
-├── package.json
-└── README.md
-```
-
-> The exact folder structure may vary depending on your implementation.
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) & npm
-- [Git](https://git-scm.com/)
-- A **Gemini API key**
-- A supported database (if used by your implementation)
-
-<details>
-<summary><b>1️⃣ Clone the repository</b></summary>
-
-```bash
-git clone https://github.com/aryanvisualize/CareerAI.git
-cd CareerAI
-```
-
-</details>
-
-<details>
-<summary><b>2️⃣ Install backend dependencies</b></summary>
-
-```bash
-cd server
-npm install
-```
-
-</details>
-
-<details>
-<summary><b>3️⃣ Configure environment variables</b></summary>
-
-Create a `.env` file inside `server/` — see [Environment Variables](#️-environment-variables) below.
-
-</details>
-
-<details>
-<summary><b>4️⃣ Start the backend</b></summary>
-
-```bash
-npm run dev
-```
-
-</details>
-
-<details>
-<summary><b>5️⃣ Install frontend dependencies</b></summary>
-
-```bash
-cd client
-npm install
-```
-
-</details>
-
-<details>
-<summary><b>6️⃣ Start the frontend</b></summary>
-
-```bash
-npm run dev
-```
-
-The app will be available at the local development URL shown in your terminal.
-
-</details>
-
----
-
-## ⚙️ Environment Variables
-
-Create a `.env` file inside the `server/` directory:
-
-```env
-PORT=5000
-
-JWT_SECRET=your_jwt_secret
-
-GEMINI_API_KEY=your_gemini_api_key
-
-# Add your database configuration if required
-DATABASE_URL=your_database_url
-```
-
-> ⚠️ **Never commit your `.env` file or API keys to GitHub.**
-
-### n8n report-ready email
-
-CareerAI can send a signed `interview.report.created` event to an n8n Webhook after saving an interview report. Users opt in or out from the dashboard; the preference defaults to off. The event contains the recipient email, report title, match score, report ID, and authenticated-app URL. Resume text, job descriptions, and generated answers are not sent to n8n.
-
-Add these variables to `Backend/.env` (see `Backend/.env.example`):
-
-```env
-FRONTEND_URL=http://localhost:5173
-N8N_REPORT_READY_WEBHOOK_URL=https://your-n8n-host/webhook-test/careerai/report-ready
-N8N_REPORT_READY_JWT_SECRET=use-the-same-random-secret-as-the-n8n-jwt-credential
-```
-
-In the n8n Webhook node, use `POST`, path `careerai/report-ready`, JWT Auth with **Passphrase** and **HS256**, and **Respond Immediately**. Set its passphrase to the same value as `N8N_REPORT_READY_JWT_SECRET`; use a separate random secret rather than reusing `JWT_SECRET`. During development, use the Test URL while the node is listening for a test event. After publishing the workflow, set the environment variable to the Production URL.
-
-The Webhook node exposes the posted event under `body`. The event body includes `event`, `eventId`, `emailOptIn`, `recipientEmail`, `reportId`, `title`, `matchScore`, and `reportUrl`. In an If node, check `{{$json.body.event}}`, `{{$json.body.emailOptIn}}`, and `{{$json.body.recipientEmail}}`. In the email node, use `{{$json.body.title}}`, `{{$json.body.matchScore}}`, and `{{$json.body.reportUrl}}`. The report link requires the user to sign in; do not add authentication tokens to it.
-
-The notification request runs after the report is saved and does not fail report generation if n8n is unavailable. Failed delivery is logged by the backend; durable retries require a notification outbox or queue.
-
----
-
-## 🔌 API Reference
-
-<details>
-<summary><b>Expand full endpoint list</b></summary>
-
-```text
-/api/auth
-    POST /register
-    POST /login
-    POST /logout
-
-/api/resume
-    POST /upload
-    POST /analyze
-    POST /generate
-
-/api/jobs
-    POST /analyze
-
-/api/skills
-    POST /gap-analysis
-
-/api/interview
-    POST /generate
-
-/api/pdf
-    POST /generate
-```
-
-> Exact endpoints depend on your implementation.
-
-</details>
-
----
-
-## 🛡️ Security Considerations
-
-| Consideration | Implementation |
-|---|---|
-| Authentication | JWT-based, with protected routes |
-| Session control | Token blacklisting on logout |
-| Secrets management | Environment variables (`.env`) |
-| Input validation | Sanitized request payloads |
-| File uploads | Controlled, validated upload handling |
-| Error handling | Centralized error middleware |
-| Logging | No sensitive data in logs |
-
----
-
-## 📌 Roadmap
-
-- [ ] 🔎 Job search and job recommendations
-- [ ] 📊 Resume ATS scoring
-- [ ] 💼 LinkedIn profile analysis
-- [ ] 🎤 AI voice interview simulation
-- [ ] 🗣️ Real-time interview conversations
-- [ ] 📈 Interview performance analytics
-- [ ] 🧑‍💼 Personalized career roadmap
-- [ ] 📚 AI-generated learning plans
-- [ ] 🔔 Job application tracking
-- [ ] 🌐 Multi-language resume generation
-- [ ] ☁️ Cloud file storage
-- [ ] 📱 Mobile-responsive improvements
-- [ ] 👥 Recruiter/company dashboard
-
----
-
-
-## 🎯 Project Goals & Learning Outcomes
-
-CareerAI is a **Generative AI project** built to demonstrate how modern web technologies and GenAI can combine into a practical, production-style application — covering full stack development, REST API design, JWT authorization, generative AI API integration, NLP, prompt engineering, and PDF automation.
+## How it works
 
 ```mermaid
 flowchart LR
-    A[React.js] --> F[Full Stack<br/>Generative AI App]
-    B[Node.js] --> F
-    C[Express.js] --> F
-    D[JWT Auth] --> F
-    E[Gemini AI] --> F
-    G[PDFKit] --> F
+    Candidate[Candidate] --> Web[React + Vite app]
+    Web -->|REST API, cookie auth| API[Express API]
+    API -->|Resume PDF text extraction| Parse[pdf-parse]
+    API -->|Profile + job description| Gemini[Google Gemini]
+    Gemini -->|Structured report| API
+    API --> DB[(MongoDB)]
+    API -->|Report-ready event| N8N[n8n Webhook]
+    API -->|Resume document| PDF[PDFKit]
+    PDF --> Candidate
 ```
 
----
+1. The candidate signs in and submits a job description plus a resume PDF and/or self-description.
+2. The backend extracts text from the uploaded PDF in memory and sends the profile and job description to Gemini.
+3. Gemini returns structured report data. The backend validates the response, saves the report in MongoDB, and returns it to the app.
+4. The candidate reviews questions, skill gaps, the preparation roadmap, and can request a tailored resume PDF.
+5. After saving a report, the backend can post a signed report-ready event to an n8n Webhook.
 
-## 🤝 Contributing
+## Technology
 
-Contributions are welcome! To contribute:
+| Area | Current implementation |
+|---|---|
+| Frontend | React 19, Vite, React Router, Axios, Sass |
+| Backend | Node.js, Express 5, REST endpoints, cookie parsing and CORS |
+| Data | MongoDB with Mongoose |
+| AI | Google GenAI SDK (`@google/genai`), configured for `gemini-3.6-flash`; Zod validates structured output |
+| Authentication | bcryptjs password hashing, JWT in an HTTP-only cookie, token blacklist on logout |
+| Resume processing | Multer memory storage and `pdf-parse` for uploaded PDFs |
+| Resume output | PDFKit generates the downloadable PDF from AI-structured resume content |
+| Automation | Optional signed HTTP event to an n8n Webhook |
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## Repository structure
 
----
+```text
+CareerAI/
+├── Backend/
+│   ├── server.js
+│   └── src/
+│       ├── config/       # MongoDB connection
+│       ├── controllers/  # Auth and interview report handlers
+│       ├── middleware/  # Cookie auth and in-memory file upload
+│       ├── models/      # Users, reports, and blacklisted tokens
+│       ├── routes/      # /api/auth and /api/interview
+│       └── services/    # Gemini, n8n, and PDF generation
+├── Frontend/
+│   ├── src/features/
+│   │   ├── auth/        # Registration, login, auth state
+│   │   └── interview/   # Plan creation, saved plans, report views
+│   ├── public/
+│   └── vercel.json      # SPA fallback and /api rewrite
+├── docs/
+│   └── careerai-preview.png
+└── Readme.md
+```
 
-## 👨‍💻 Author
+## Run locally
 
-**Aryan**
-Full Stack Developer · AI/ML Enthusiast
+### Prerequisites
 
-GitHub: [github.com/aryanvisualize](https://github.com/aryanvisualize) · LinkedIn: [linkedin.com/in/aryan-rastogi-dev](https://www.linkedin.com/in/aryan-rastogi-dev/)
+- Node.js 20.19 or later and npm
+- A reachable MongoDB database
+- A Google AI Studio API key for Gemini
+- n8n only if you want report-ready automation
 
----
+### 1. Configure the backend
 
-<div align="center">
+From the repository root:
 
-### ⭐ If you found this project useful, consider giving it a star!
+```bash
+cd Backend
+npm install
+```
 
-**A Generative AI project built with ❤️ using React, Node.js, Express.js, Gemini AI, JWT, and PDFKit.**
+Create `Backend/.env` with the required settings:
 
-</div>
+```env
+PORT=3000
+NODE_ENV=development
+MONGO_URI=mongodb://127.0.0.1:27017/careerai
+JWT_SECRET=replace-with-a-long-random-secret
+GOOGLE_GENAI_API_KEY=your-google-ai-studio-api-key
+FRONTEND_URLS=http://localhost:5173
+```
+
+`FRONTEND_URLS` is a comma-separated allowlist used by the backend CORS configuration. Add each frontend origin that should be allowed to make credentialed API requests.
+
+Start the backend:
+
+```bash
+npm start
+```
+
+The API listens on port `3000` by default. It connects to MongoDB before accepting requests. The health endpoint is `http://localhost:3000/health`. The backend package's `dev` script calls `nodemon`, which is not currently declared as a dependency; use `npm start` for a clean install.
+
+### 2. Configure and start the frontend
+
+In a second terminal:
+
+```bash
+cd Frontend
+npm install
+```
+
+Create `Frontend/.env.local`:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+Start Vite:
+
+```bash
+npm run dev
+```
+
+Open the local URL printed by Vite (usually `http://localhost:5173`). The frontend sends credentialed requests to the backend; keep the frontend origin in `FRONTEND_URLS`.
+
+### Frontend scripts
+
+Run these from `Frontend/`:
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Build the frontend for deployment |
+| `npm run preview` | Preview a production build locally |
+| `npm run lint` | Run ESLint |
+
+## n8n report-ready automation
+
+The backend posts an `interview.report.created` event after it saves each interview report. An n8n workflow can use the event to send a report-ready email or perform another follow-up action. The application itself does not send email; delivery depends on the workflow and its email provider.
+
+Add these settings to `Backend/.env` to enable the webhook:
+
+```env
+FRONTEND_URL=http://localhost:5173
+N8N_REPORT_READY_WEBHOOK_URL=https://your-n8n-host/webhook/careerai/report-ready
+N8N_REPORT_READY_JWT_SECRET=use-a-separate-long-random-secret
+```
+
+Configure an n8n Webhook node to accept `POST` requests at `careerai/report-ready`, require JWT authentication using HS256 and the same passphrase as `N8N_REPORT_READY_JWT_SECRET`, and respond immediately. Use the node's test URL while testing, then configure its production URL after activating the workflow.
+
+The signed request carries a short-lived bearer token (60 seconds) and a JSON body similar to:
+
+```json
+{
+  "event": "interview.report.created",
+  "eventId": "report-ready:<reportId>",
+  "recipientEmail": "candidate@example.com",
+  "userId": "<userId>",
+  "reportId": "<reportId>",
+  "title": "Frontend Engineer",
+  "matchScore": 78,
+  "reportUrl": "http://localhost:5173/interview/<reportId>"
+}
+```
+
+The webhook payload contains report metadata and the recipient email; it does not include the resume text, self-description, job description, or generated answers. The report URL is protected by sign-in. The event is currently sent for every saved report; an email opt-in preference is not wired into the current user model or frontend. Webhook delivery is fire-and-forget: a failed request is logged, but report creation continues and the backend does not retry it.
+
+## API overview
+
+Protected endpoints require the authentication cookie.
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| `GET` | `/health` | Public | Backend and MongoDB readiness |
+| `POST` | `/api/auth/register` | Public | Create an account |
+| `POST` | `/api/auth/login` | Public | Sign in |
+| `POST` | `/api/auth/logout` | Public | Clear cookie and blacklist the current token |
+| `GET` | `/api/auth/get-me` | Protected | Get the signed-in user |
+| `POST` | `/api/interview` | Protected | Generate a report; multipart fields `jobDescription`, optional `selfDescription`, optional PDF field `resume` |
+| `GET` | `/api/interview` | Protected | List the user's saved reports |
+| `GET` | `/api/interview/report/:interviewId` | Protected | Fetch one owned report |
+| `PATCH` | `/api/interview/report/:interviewId/pin` | Protected | Pin or unpin a report (`{ "isPinned": true }`) |
+| `DELETE` | `/api/interview/report/:interviewId` | Protected | Delete an owned report |
+| `POST` | `/api/interview/resume/pdf/:interviewReportId` | Protected | Generate and download a tailored PDF resume |
+
+The job description is required. The request must include a resume PDF or a non-empty self-description. Uploaded PDFs are limited to 5 MB.
+
+## Data, security, and scope
+
+- Passwords are hashed with bcryptjs. The signed JWT is stored in an HTTP-only cookie and expires after one day. Logout blacklists the token and clears the cookie.
+- Resume PDFs are accepted into memory for text extraction; the original uploaded file is not written to disk. The extracted resume text, self-description, job description, and generated report are stored in MongoDB with the report.
+- Candidate profile and job-description content is sent to Google's Gemini API to generate the report and resume content. Review Google's terms and data settings before using sensitive candidate information.
+- The n8n event shares only the report metadata and recipient email described above. Keep its JWT secret separate from `JWT_SECRET` and store secrets as deployment environment variables.
+- Generated match scores, skill-gap labels, questions, answers, and resume wording can be incomplete or incorrect. Candidates should verify every claim and should not present AI-generated content as experience they do not have.
+- The email-preferences route is present in the backend, but the current user schema does not persist that field and the frontend has no preference control. The n8n event therefore currently runs without an in-app opt-in setting.
+
+## Deployment note
+
+`Frontend/vercel.json` contains a Vercel SPA fallback and rewrites `/api/*` requests to the Render backend URL configured in that file. For another deployment, update that destination or set `VITE_API_URL` to the backend origin, and configure the backend's `FRONTEND_URLS` with the deployed frontend origin.
+
+## License
+
+CareerAI is distributed under the [MIT License](LICENSE).
+
+## Author
+
+**Aryan Rastogi** | [GitHub](https://github.com/aryanvisualize) | [LinkedIn](https://www.linkedin.com/in/aryan-rastogi-dev/)
