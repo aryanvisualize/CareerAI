@@ -58,7 +58,8 @@ async function registerUserController(req, res) {
         user: {
             id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            reportReadyEmailOptIn: user.reportReadyEmailOptIn
         }
     });
 }
@@ -107,7 +108,8 @@ async function loginUserController(req, res) {
         user: {
             id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            reportReadyEmailOptIn: user.reportReadyEmailOptIn
         }
     });
 } // <-- THIS WAS MISSING
@@ -152,7 +154,42 @@ async function getMeController(req, res) {
         user: {
             id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            reportReadyEmailOptIn: user.reportReadyEmailOptIn
+        }
+    });
+}
+
+/**
+ * @description Update whether the user wants report-ready emails.
+ * @access Private
+ */
+async function updateReportReadyEmailPreferenceController(req, res) {
+    const { reportReadyEmailOptIn } = req.body;
+
+    if (typeof reportReadyEmailOptIn !== "boolean") {
+        return res.status(400).json({
+            message: "reportReadyEmailOptIn must be a boolean value."
+        });
+    }
+
+    const user = await userModel.findByIdAndUpdate(
+        req.user.id,
+        { reportReadyEmailOptIn },
+        { new: true, runValidators: true }
+    );
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+        message: "Email preference updated successfully.",
+        user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            reportReadyEmailOptIn: user.reportReadyEmailOptIn
         }
     });
 }
@@ -162,5 +199,6 @@ module.exports = {
     registerUserController,
     loginUserController,
     logoutUserController,
-    getMeController
+    getMeController,
+    updateReportReadyEmailPreferenceController
 };

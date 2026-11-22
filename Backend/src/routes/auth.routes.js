@@ -42,5 +42,16 @@ authRouter.post("/logout", authController.logoutUserController)
  */
 authRouter.get("/get-me", authMiddleware.authUser, authController.getMeController)
 
+/**
+ * @route PATCH /api/auth/email-preferences
+ * @description Update report-ready email preference
+ * @access Private
+ */
+authRouter.patch(
+    "/email-preferences",
+    authMiddleware.authUser,
+    authController.updateReportReadyEmailPreferenceController
+)
+
 
 module.exports = authRouter

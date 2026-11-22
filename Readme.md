@@ -321,6 +321,24 @@ DATABASE_URL=your_database_url
 
 > ⚠️ **Never commit your `.env` file or API keys to GitHub.**
 
+### n8n report-ready email
+
+CareerAI can send a signed `interview.report.created` event to an n8n Webhook after saving an interview report. Users opt in or out from the dashboard; the preference defaults to off. The event contains the recipient email, report title, match score, report ID, and authenticated-app URL. Resume text, job descriptions, and generated answers are not sent to n8n.
+
+Add these variables to `Backend/.env` (see `Backend/.env.example`):
+
+```env
+FRONTEND_URL=http://localhost:5173
+N8N_REPORT_READY_WEBHOOK_URL=https://your-n8n-host/webhook-test/careerai/report-ready
+N8N_REPORT_READY_JWT_SECRET=use-the-same-random-secret-as-the-n8n-jwt-credential
+```
+
+In the n8n Webhook node, use `POST`, path `careerai/report-ready`, JWT Auth with **Passphrase** and **HS256**, and **Respond Immediately**. Set its passphrase to the same value as `N8N_REPORT_READY_JWT_SECRET`; use a separate random secret rather than reusing `JWT_SECRET`. During development, use the Test URL while the node is listening for a test event. After publishing the workflow, set the environment variable to the Production URL.
+
+The Webhook node exposes the posted event under `body`. The event body includes `event`, `eventId`, `emailOptIn`, `recipientEmail`, `reportId`, `title`, `matchScore`, and `reportUrl`. In an If node, check `{{$json.body.event}}`, `{{$json.body.emailOptIn}}`, and `{{$json.body.recipientEmail}}`. In the email node, use `{{$json.body.title}}`, `{{$json.body.matchScore}}`, and `{{$json.body.reportUrl}}`. The report link requires the user to sign in; do not add authentication tokens to it.
+
+The notification request runs after the report is saved and does not fail report generation if n8n is unavailable. Failed delivery is logged by the backend; durable retries require a notification outbox or queue.
+
 ---
 
 ## 🔌 API Reference

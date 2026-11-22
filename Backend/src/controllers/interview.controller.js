@@ -1,6 +1,7 @@
 const pdfParse = require("pdf-parse")
 const { generateInterviewReport, generateStructuredResume } = require("../services/ai.service")
 const { generateResumePdf } = require("../services/resume-pdf.service")
+const { sendReportReadyEvent } = require("../services/n8n.service")
 const interviewReportModel = require("../models/interviewReport.model")
 
 
@@ -73,6 +74,10 @@ async function generateInterViewReportController(req, res) {
             selfDescription: selfDescription || "",
             jobDescription,
             ...interViewReportByAi
+        })
+
+        sendReportReadyEvent(interviewReport).catch((notificationError) => {
+            console.error("[n8n] Report-ready event failed:", notificationError.message)
         })
 
         return res.status(201).json({
